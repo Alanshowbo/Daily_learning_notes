@@ -6,7 +6,7 @@ Created in 2017/2/20 by YunShuiXin
 + 旋转矩阵乘以点P的齐次坐标，得到旋转后的点P'，表述为：
   + ![](R_P.png)
 + 绕x、y、z轴旋转θ的旋转矩阵为：
-  + ![](R_X_Y_Z.png)
+  + ![](R_XYZ.png)
 
 ---
 
@@ -22,3 +22,8 @@ Created in 2017/2/20 by YunShuiXin
 ## 四元数
 + 四元数能够很方便的刻画刚体绕任意轴的旋转。四元数是一种高阶复数，四元数q表示为：q=(x,y,z,w)=xi+yj+zk+w
 + 四元数可用来刻画三维空间中的旋转，绕单位向量(x,y,z)表示的轴旋转θ，可令：q=((x,y,z)sin(θ/2),cos(θ/2)),刚体坐标系中的点p(P,0)（写成四元数的形式），旋转后的坐标p'为：p'=qpq<sup>-1</sup>
+
+## 四元数转换成欧拉角
++ ![](Quaternion.PNG)
+
++ ![](Quaternion_to_Euler.PNG)

@@ -22,7 +22,6 @@ Created in 2017/2/15 by YunShuiXin
 `code code`
 + triple "*" or "-" is split line
 
-> 没早点知道Markdown... What a pity
 
 -----------------------
 
@@ -40,3 +39,18 @@ Created in 2017/2/15 by YunShuiXin
 
 ### On windows
 [Atom中文社区源](https://npm.taobao.org/mirrors/atom)
+
+---
+
+## Atom Package install
++ settings install(blocked)
++ Install GIT and NPM(NodeJS)
+        cd ***/.atom/packages
+        git clone <package link>
+        cd <package directory>
+        npm install
+
+## Markdown LaTeX Render
+        cd <package directory>
+        npm install fs-plus
+        git clone <markdown preview plus link>

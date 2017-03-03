@@ -62,13 +62,12 @@ written by nieyong、CamelGo -> [Github](https://github.com/nieyong)
 ## Part 5 Crazepony原理讲解
 + [Crazepony硬件原理讲解](https://nieyong.gitbooks.io/crazepony-gitbook/content/wiki/hardware-base.html)
 + [软件框架](https://nieyong.gitbooks.io/crazepony-gitbook/content/wiki/softmain.html)
-
- + ![](software_process.png)
+  + <img src="./software_process.png" width="580" height="665" align=center />
 + **工作流程**：
   + 主函数之后就是STM32处理器及各个部分的初始化；
   + 主循环-200Hz循环：读取mpu6050数据，气压计数据并进行整合。因为采用软解姿态，读取的数据为加速度计和陀螺仪的AD值，将数据进行标定、滤波、校正后通过四元素融合得到三轴欧拉角度；
-   + ![](main_loop_100hz.png)
-   + ![](angle_pid.png)
+     + <img src="./main_loop_100hz.png" width="645" height="200" align=center />
+     + <img src="./angle_pid.png" width="752" height="200" align=center />
 
   + 主循环-50Hz循环：这里解析收到的遥控器无线发送过来的指令，结合当前的姿态计算更新这些控制数据给核心控制算法输出控制飞控；
   + 主循环-10Hz循环：这里可以通过蓝牙向手机APP传送一些飞控的姿态信息，然后查询飞控的电量，若不足则让飞控降落下来，查询高度、遥控是否失联等；
@@ -78,22 +77,21 @@ written by nieyong、CamelGo -> [Github](https://github.com/nieyong)
 
 ---
 
-# Part 6 二次开发指南
+## Part 6 二次开发指南
 + [开发环境配置](https://nieyong.gitbooks.io/crazepony-gitbook/content/wiki/setup-environment-in-windows-none.html)
 + **自主悬停**：在水平面上，为了确定飞行器的位置，一般使用GPS进行定位，室内一般使用光流(optical flow)进行定位。在垂直方向上，一般使用气压计进行定高，室内等条件下可以使用超声波模块。只使用3维加速度和3维陀螺仪这6个维度的数据实现自主悬停很难实现，因为只使用这个6维数据，无法知道飞行器在空中的绝对坐标，只能够由6维数据获得相对偏移。没有绝对坐标，就无法对位置实现闭环控制。
  + Crazepony有一个高精度气压计MS5611，所以可以实现Z轴的自主悬停。在水平方向上，crazepony没有绝对坐标，无法实现悬停。将气压传感器采集值进行校正后，再通过温度二阶补偿，得到准确的大气压值，最后经过气压转换高度公式就可以得到一个相对于起飞地点的绝对高度。MS5611气压计的精度为10CM，因此需要融合加速度计互补滤波得到比较合适的高度值，Z轴速度值和加速度值。用高度作外环，速度作内环形成高度双环PID控制器，调节输出油门实现Z轴的自主悬停。高度融合在文件Altitude.c中实现，高度双环PID控制在Control.c文件中的CtrlAlti()函数中实现。
-  + ![](altitude_pid.png)
+
+  + <img src="./altitude_pid.png" width="732" height="194" align=center />
 
  + 在水平方向上，由于Crazepony没有绝对坐标，使用3维加速度和3维陀螺仪这6个维度的数据进行双环PID控制形成一个自稳系统，可实现短时间定点脱控悬停，但是受误差影响产生偏离，没有水平绝对坐标就无法回到原来的位置，所以Crazepony是无法实现正真意义上自动悬停。
 + **Z轴悬停-悬停油门基准值**：早期的Crazepony在Z轴悬停代码中，直接定义了一个悬停油门基准值HOVER_THRU，该值决定着飞行器脱控悬停的时候需要的油门大小，这样直接定义会导致电池电压变化后出现往上飞或者掉高的问题，在之后的代码中根据电池电压不同，使用不同的油门基准值：
 
         float estimateHoverThru(void){
         float hoverHru = 0.55f;
-
         //电池电压检测
         Battery.BatteryAD  = GetBatteryAD();
         Battery.BatteryVal = Battery.Bat_K * (Battery.BatteryAD/4096.0) * Battery.ADRef;//实际电压值计算
-
         if(Battery.BatteryVal > 4.05){
         hoverHru = -0.35f;
         }else if(Battery.BatteryVal > 3.90){
@@ -105,18 +103,15 @@ written by nieyong、CamelGo -> [Github](https://github.com/nieyong)
         }else{
         hoverHru = -0.55f;
         }
-
         return hoverHru;
         }
 + **Z轴悬停-最小油门值**：Crazepony设定了一个最小的油门输出值THR_MIN，这样能够限制最大的下降速度。可以避免下降速度过快，机身失去平衡。有时候也会带来副作用。例如充电后第一次飞行，由于动力输出强劲，如果这个最小油门输出值设置得过大，那么即使将摇杆油门拉到了最低，飞机也会一直往上冲。在后期版本中同样加入了依据当前电池电压设定最小油门值的功能：
 
         float estimateMinThru(void){
             float minThru = -0.55f;
-
             //电池电压检测
             Battery.BatteryAD  = GetBatteryAD();
             Battery.BatteryVal = Battery.Bat_K * (Battery.BatteryAD/4096.0) * Battery.ADRef;//实际电压值计算
-
             if(Battery.BatteryVal > 4.05){
                 minThru = -0.30f;
             }else if(Battery.BatteryVal > 3.90){
@@ -132,8 +127,84 @@ written by nieyong、CamelGo -> [Github](https://github.com/nieyong)
 
 ---
 
-# Part 7 算法讲解
+## Part 7 算法讲解
 + **四元数和欧拉角**：姿态有多种数学表示方式，常见的是四元数，欧拉角，矩阵和轴角。相对于另几种旋转表示法，四元数具有某些方面的优势，如速度更快、提供平滑插值、有效避免万向锁问题、存储空间较小等等。
 + **欧拉角**：zx'z'-->α、β、γ，按照旋转轴的顺序，该组欧拉角被称为是“zxz顺规”的。不同领域有不同的顺归方式。
-  + ![](euler_angles.png)
-+ [四元数和欧拉角Wiki](https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles)，[三维旋转：旋转矩阵，欧拉角，四元数](http://www.cnblogs.com/yiyezhai/p/3176725.html)
++ [软件解算姿态](https://nieyong.gitbooks.io/crazepony-gitbook/content/wiki/software-algorithm.html)
++ **四元数**
+  + <img src="./Quaternion.PNG" width="84" height="13" align=center />
+  + 模
+    + <img src="./Quaternion_LENGTH.PNG" width="80" height="13" align=center />
+  + 单位化：
+    + <img src="./Quaternion_Normalize.PNG" width="90" height="24" align=center />
+  + 四元数相乘，旋转组合：
+    + <img src="./Quaternion_Multiplication.PNG" width="119" height="63" align=center />
+
++ 四元数与欧拉角
+  + <img src="./Quaternion_to_Euler.PNG" width="168" height="98" align=center />
+
+---
+
+## Part 8 PID控制
+### PID控制理论
++ PID控制是最常见，应用最为广泛的自动反馈系统。PID控制器由偏差的比例（P，Proportional）、积分（I，Integral）和微分（D，Derivative）来对被控对象进行控制。这里的积分或微分，都是偏差对时间的积分或微分。
+  + <img src="./PID.PNG" width="200" height="133" align=center />
++ 对于一个自动反馈控制系统来说，有几个基本的指标。
+  + 稳定性（P和I降低系统稳定性，D提高系统稳定性）：在平衡状态下，系统受到某个干扰后，经过一段时间其被控量可以达到某一稳定状态；
+  + 准确性（P和I提高稳态精度，D无作用）：系统处于稳态时，其稳态误差（Steady-state error）；
+  + 快速性（P和D提高响应速度，I降低响应速度）：系统对动态响应的要求。一般由过渡时间的长短来衡量。
+ + 比例控制：
+   + 比例控制是一种最简单的控制方式。其控制器的输出与输入误差信号成比例关系。当仅有比例控制时系统输出存在稳态误差。比例项输出：
+   + P<sub>out</sub>=K<sub>p</sub>e(t)
+ + 积分控制：
+   + 在积分控制中，控制器的输出与输入误差信号的积分成正比关系。对于只有比例控制的系统存在稳态误差，为了消除稳态误差，在控制器中必须引入“积分项”。积分项是误差对时间的积分，随着时间的增加，积分项会增大。这样，即便误差很小，积分项也会随着时间的增加而加大，它推动控制器的输出增大使稳态误差进一步减小，直到等于零。因此，比例积分(PI)控制器，可以使系统在进入稳态后无稳态误差。 积分项输出：
+   + I<sub>out</sub>=K</sub>i</sub>&int;e(t)dt
+ + 微分控制：
+   + 在微分控制中，控制器的输出与输入误差信号的微分成正比关系。微分调节就是偏差值的变化率。使用微分调节能够实现系统的超前控制。如果输入偏差值线性变化，则在调节器输出侧叠加一个恒定的调节量。大部分控制系统不需要调节微分时间。因为只有时间滞后的系统才需要附加这个参数。微分项输出：
+     + D<sub>out</sub>=K</sub>d</sub>(de(t))/dt
+ + PID控制表达式：
+   + <img src="./PID_Formula.PNG" width="197" height="23" align=center />
+
+### PID控制在Crazepony中的应用
+#### 单环PID控制
++ Crazepony的5.0版本及以前，我们使用的是单环增量式PD控制
+  + <img src="./Single_PID.PNG" width="227" height="91" align=center />
+  + 以ROLL方向角度控制为例，偏差=目标期望角度-传感器实测角度
+
+        DIF_ANGLE.X = EXP_ANGLE.X - Q_ANGLE.Roll
+
+  + 比例项的计算：比例项输出 = 比例系数P * 偏差
+
+        Proportion =  PID_Motor.P * DIF_ANGLE.X
+
+  + 微分项计算： 由于陀螺仪测得的是ROLL轴向旋转角速率，角速率积分就是角度，那么角度微分即角速率，所以微分量刚好是陀螺仪测得的值。微分输出=微分系数D*角速率
+
+        DifferentialCoefficient = PID_Motor.D * DMP_DATA.GYROx
+
+  + 整合结果总输出为：
+        ROLL方向总控制量=比例项输出+微分量输出
+  + ROLL和PITCH轴按照以上公式计算PID输出，但YAW轴比较特殊，因为偏航角法线方向刚好和地球重力平行，这个方向的角度无法由加速度计直接测得，需要增加一个电子罗盘来替代加速度计。如果不使用罗盘的话，我们可以单纯的通过角速度积分来测得偏航角，缺点是由于积分环节中存在积分漂移，偏航角随着时间的推移会偏差越来越大，就会出现航向角漂移的问题。我们不使用罗盘就没有比例项，只仅使用微分环节来控制。
+  + YAW轴输出：微分输出=微分系数D*角速率
+
+        YAW方向控制量 = PID_YAW.D * DMP_DATA.GYROz
+
+#### 串联PID控制
+
++ 角度单环PID控制算法仅仅考虑了飞行器的角度信息，如果想增加飞行器的稳定性(增加阻尼)并提高它的控制品质，我们可以进一步的控制它的角速度，于是角度/角速度-串级PID控制算法应运而生。串级PID控制增强了系统的抗干扰性(也就是增强稳定性)，因为有两个控制器控制飞行器，它会比单个控制器控制更多的变量，使得飞行器的适应能力更强。为了更为清晰的讲解串级PID，这里笔者依旧画出串级PID的原理框图，如图所示：
+  + <img src="./Serial_PID.PNG" width="320" height="113" align=center />
++ 整定串级PID时的经验,原则是先整定内环PID，再整定外环P:
+  + 内环P：从小到大，拉动四轴越来越困难，越来越感觉到四轴在抵抗你的拉动；到比较大的数值时，四轴自己会高频震动，肉眼可见，此时拉扯它，它会快速的振荡几下，过几秒钟后稳定；继续增大，不用加人为干扰，自己发散翻机。特别注意：只有内环P的时候，四轴会缓慢的往一个方向下掉，这属于正常现象。这就是系统角速度静差。
+  + 内环I：前述PID原理可以看出，积分只是用来消除静差，因此积分项系数个人觉得没必要弄的很大，因为这样做会降低系统稳定性。从小到大，四轴会定在一个位置不动，不再往下掉；继续增加I的值，四轴会不稳定，拉扯一下会自己发散。特别注意：增加I的值，四轴的定角度能力很强，拉动他比较困难，似乎像是在钉钉子一样，但是一旦有强干扰，它就会发散。这是由于积分项太大，拉动一下积分速度快，给 的补偿非常大，因此很难拉动，给人一种很稳定的错觉。
+  + 内环D：这里的微分项D为标准的PID原理下的微分项，即本次误差-上次误差。在角速度环中的微分就是角加速度，原本四轴的震动就比较强烈，引起陀螺的值变化较大，此时做微分就更容易引入噪声。因此一般在这里可以适当做一些滑动滤波或者IIR滤波。从小到大，飞机的性能没有多大改变，只是回中的时候更加平稳；继续增加D的值，可以肉眼看到四轴在平衡位置高频震动(或者听到电机发出滋滋的声音)。前述已经说明D项属于辅助性项，因此如果机架的震动较大，D项可以忽略不加。
+  + 外环P：当内环PID全部整定完成后，飞机已经可以稳定在某一位置而不动了。此时外环P，从小到大，可以明显看到飞机从倾斜位置慢慢回中，用手拉扯它然后放手，它会慢速回中，达到平衡位置；继续增大P的值，用遥控器给不同的角度给定，可以看到飞机跟踪的速度和响应越来越快；继续增加P的值，飞机变得十分敏感，机动性能越来越强，有发散的趋势。
++ 电机的输出整合
+  + <img src="./PID_MOTOR.PNG" width="125" height="105" align=center />
+
+            Motor[2] = (int16_t)(Thr - Pitch - Roll - Yaw );    //M3
+            Motor[0] = (int16_t)(Thr + Pitch + Roll - Yaw );    //M1
+            Motor[3] = (int16_t)(Thr - Pitch + Roll + Yaw );    //M4
+            Motor[1] = (int16_t)(Thr + Pitch - Roll + Yaw );    //M2
+
+  + Roll方向旋转，为了恢复平衡，则电机1电机2同侧出力，电机0电机3反向出力（Motor[1]和Motor[2]中的Roll为-，Motor[0]和Motor[3]中的Roll为+）
+  + Pitch方向旋转，为了恢复平衡，则电机2电机3同侧出力，电机0电机1反向出力（Motor[2]和Motor[3]中的Pitch为-，Motor[0]和Motor[1]中的Pitch为+）
+  + Yaw方向旋转，为了恢复平衡，则电机1电机3同侧出力，电机0电机2反向出力，（Motor[1]和Motor[3]中的Yaw为+，Motor[0]和Motor[2]中的Yaw为-）
