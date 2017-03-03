@@ -21,7 +21,12 @@ Created in 2017/2/15 by YunShuiXin
 
 `code code`
 + triple "*" or "-" is split line
-
++ Math symbols(html special symbols):
+  + n<sup>2</sup>=n+1
+  + a=log<sub>2</sub>b
+  + &fnof;(x)=x+1
+  + &radic;5
+  + 30&deg;
 
 -----------------------
 
