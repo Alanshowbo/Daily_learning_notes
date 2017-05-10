@@ -1,0 +1,13 @@
+# Linux 环境部署
+
+## Python：
++ python3 pip：`sudo apt-get install python3-pip`
++ pyqtgraph:[deb](http://pyqtgraph.org/)  `sudo dpkg ***.deb --install`
+
+## Leap Motion
++ Check Leap Motion daemon with:`service leapd status`
++ Open the Leap Motion GUI with:`LeapControlPanel`
+
++ + `echo "export PYTHONPATH=$PYTHONPATH:/home/shuixin/Downloads/LeapDeveloperKit/LeapSDK/lib:/home/shuixin/Downloads/LeapDeveloperKit/LeapSDK/lib/x64" >> ~/.bashrc`
+  + `source ~/.bashrc`
++ /home/shuixin/Downloads/LeapDeveloperKit
