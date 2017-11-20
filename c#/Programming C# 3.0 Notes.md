@@ -1,5 +1,5 @@
 # 《Programming C# 3.0 》 学习笔记
-> Jesse Liberty、Donald Xie 著
+> Created By YunShuiXin @ 2017/11
 
 ## Chapter 01 c# 与.NET框架
 + LINQ(Language-Intergrated Query 语言集成查询)
