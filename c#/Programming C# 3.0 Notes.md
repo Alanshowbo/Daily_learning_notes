@@ -236,11 +236,18 @@
   + 抽象的局限：虽然在Control中指定DrawWindow()为抽象会去爱你固执要求所有派生类实现此方法，但如果从Listbox再派生一个类，就无法再强制二次派生的类实现DrawWindow()方法
   + 抽象类创建了一个合同(contract)，描述了要实现该抽象的所有类的公共方法
   + 抽象类Control应反映所有Control的共性，即永远不用实例化抽象的Control的本身
++ virtual和abstract的区别:
+  + virtual修饰的方法必须有实现（哪怕是仅仅添加一对大括号),而abstract修饰的方法一定不能实现;
+  + virtual可以被子类重写，而abstract必须被子类重写
+  + 如果类成员被abstract修饰，则该类前必须添加abstract，因为只有抽象类才可以有抽象方法
+  + 无法创建abstract类的实例，只能被继承无法实例化
+  + C#中如果要在子类中重写方法，必须在父类方法前加virtual，在子类方法前添加override,这样就避免了程序员在子类中不小心重写了父类方法
+  + abstract方法必须重写，virtual方法必须有实现(即便它是在abstract类中定义的方法)
 + 密封类(sealed)：与抽象类相对应，密封类完全不允许被派生，使用关键字sealed声明
 + 万类之根：Object. c#中的所有类都可看成最终由System.Object派生而来。Object提供了子类可重定义的大量方法
 
-| **Methods**       | **Function**  |
-| ----------------- | ------------- |
+| 方法              | 功能           |
+|-------------------|---------------|
 | Equals()          | Determines whether the specified object is equal to the current object |
 | GetHashCode()     | Serves as the default hash function. |
 | GetType()         | Gets the Type of the current instance. |
@@ -379,45 +386,45 @@
 + 数组：
   + 数组是具有索引的同类型对象的集合，c#数组和c++等其它语言不同，c#中的数组都是对象，这使得它有各种方法和属性
 
-        | 方法或属性         |说明          |
-        | ----------------- | -------------|
-        | AsReadOnly()      | 返回给定数组的一个只读实例 |
-        | BinarySearch()    | 用于搜索一维已排序数组 |
-        | Clear()           | 用于将数组中某范围内的元素设为0或者空引用 |
-        | Clone()           | 用于创建现有数组的一个深度拷贝 |
-        | ConstrainedCopy() | 用于将数组中的某一部分复制到另一个数组，此方法保证只在所有选定元素均能被成功复制时才修改目标数组 |
-        | ConvertAll()      | 用于将一个类型的数组转换成另一个类型 |
-        | Copy()            | 用于将数组中的一部分复制到另一数组 |
-        | CopyTo()          | 用于将当前数组的所有元素复制到另一数组 |
-        | CreatInstance()   | 用于实例化数组的新实例 |
-        | Exists()          | 检查数组是否包含满足某个条件的元素 |
-        | Find()            | 搜索与条件相匹配的元素，并返回整个 Array 中的第一个匹配元素 |
-        | FindAll()         | 检索与条件匹配的所有元素 |
-        | FindIndex()       | 返回数组中第一个符合条件的元素的索引 |
-        | FindLast()        | 找到并返回在数组中最后一个满足条件的元素 |
-        | FindLastIndex()   | 返回在数组中最后一个满足条件的元素的索引 |
-        | ForEach()         | 对指定数组的每个元素执行指定操作 |
-        | GetEnumerator()   | 返回 IEnumerator |
-        | GetLength()       | 返回数组中指定维的长度 |
-        | GetLongLength     | 返回一个64位整数表示的数组中指定维的长度 |
-        | GetLowerBound()   | 获取数组中指定维度第一个元素的索引 |
-        | GetUpperBound()   | 获取数组中指定维度最后一个元素的索引 |
-        | GetValue()        | 获取数组中指定位置的值 |
-        | IndexOf()         | 在一个一维数组的一系列元素中搜索指定对象，然后返回其首个匹配项的索引 |
-        | Initialize()      | 通过调用值类型的默认构造函数，初始化值类型数组的每一个元素 |
-        | IsFixedSized      | 获取一个布尔值，该值指示 Array 是否具有固定大小 |
-        | IsReadOnly        | 获取一个布尔值，该值指示 Array 是否为只读 |
-        | <font color = blue> IsSynchronized </font>    | 获取一个布尔值，该值指示是否同步对 Array 的访问（线程安全）|
-        | LastIndexOf()     | 搜索指定的对象，并返回整个数组中最后一个匹配项的索引 |
-        | Length            | 获取数组的所有维度中的元素总数 |
-        | LongLength        | 获取一个 64 位整数，该整数表示 Array 的所有维数中元素的总数 |
-        | Rank              | 获取 Array 的秩（维数）。 例如，一维数组返回 1，二维数组返回 2，依次类推... |
-        | ReSize()          | 将一维数组的元素数更改为指定的新大小 |
-        | Reverse()         | 反转整个一维 Array 中元素的顺序 |
-        | SetValve()        | 将指定数组元素设置为一个值 |
-        | <font color = blue> Sort() </font>            | 使用数组中每个元素的 IComparable 实现，对整个一维 Array 中的元素进行排序(string 按字母) |
-        | SyncRoot          | 获取可用于同步对 Array 的访问的对象 |
-        | TrueForAll()      | 确定数组中的每个元素是否都与指定谓词定义的条件匹配 |
+| 方法或属性         |说明          |
+|-------------------|--------------|
+| AsReadOnly()      | 返回给定数组的一个只读实例 |
+| BinarySearch()    | 用于搜索一维已排序数组 |
+| Clear()           | 用于将数组中某范围内的元素设为0或者空引用 |
+| Clone()           | 用于创建现有数组的一个深度拷贝 |
+| ConstrainedCopy() | 用于将数组中的某一部分复制到另一个数组，此方法保证只在所有选定元素均能被成功复制时才修改目标数组 |
+| ConvertAll()      | 用于将一个类型的数组转换成另一个类型 |
+| Copy()            | 用于将数组中的一部分复制到另一数组 |
+| CopyTo()          | 用于将当前数组的所有元素复制到另一数组 |
+| CreatInstance()   | 用于实例化数组的新实例 |
+| Exists()          | 检查数组是否包含满足某个条件的元素 |
+| Find()            | 搜索与条件相匹配的元素，并返回整个 Array 中的第一个匹配元素 |
+| FindAll()         | 检索与条件匹配的所有元素 |
+| FindIndex()       | 返回数组中第一个符合条件的元素的索引 |
+| FindLast()        | 找到并返回在数组中最后一个满足条件的元素 |
+| FindLastIndex()   | 返回在数组中最后一个满足条件的元素的索引 |
+| ForEach()         | 对指定数组的每个元素执行指定操作 |
+| GetEnumerator()   | 返回 IEnumerator |
+| GetLength()       | 返回数组中指定维的长度 |
+| GetLongLength     | 返回一个64位整数表示的数组中指定维的长度 |
+| GetLowerBound()   | 获取数组中指定维度第一个元素的索引 |
+| GetUpperBound()   | 获取数组中指定维度最后一个元素的索引 |
+| GetValue()        | 获取数组中指定位置的值 |
+| IndexOf()         | 在一个一维数组的一系列元素中搜索指定对象，然后返回其首个匹配项的索引 |
+| Initialize()      | 通过调用值类型的默认构造函数，初始化值类型数组的每一个元素 |
+| IsFixedSized      | 获取一个布尔值，该值指示 Array 是否具有固定大小 |
+| IsReadOnly        | 获取一个布尔值，该值指示 Array 是否为只读 |
+| <font color = blue> IsSynchronized </font>    | 获取一个布尔值，该值指示是否同步对 Array 的访问（线程安全）|
+| LastIndexOf()     | 搜索指定的对象，并返回整个数组中最后一个匹配项的索引 |
+| Length            | 获取数组的所有维度中的元素总数 |
+| LongLength        | 获取一个 64 位整数，该整数表示 Array 的所有维数中元素的总数 |
+| Rank              | 获取 Array 的秩（维数）。 例如，一维数组返回 1，二维数组返回 2，依次类推... |
+| ReSize()          | 将一维数组的元素数更改为指定的新大小 |
+| Reverse()         | 反转整个一维 Array 中元素的顺序 |
+| SetValve()        | 将指定数组元素设置为一个值 |
+| <font color = blue> Sort() </font>            | 使用数组中每个元素的 IComparable 实现，对整个一维 Array 中的元素进行排序(string 按字母) |
+| SyncRoot          | 获取可用于同步对 Array 的访问的对象 |
+| TrueForAll()      | 确定数组中的每个元素是否都与指定谓词定义的条件匹配 |
 
   + 默认值：创建值类型数组时，每个元素最初都存放着数组所存类型的默认值，如int类型默认为0；与值类型不同，数组中的引用类型不能被初始化为默认值，它们被初始化为null，如果在特地初始化引用类型数组之前，访问其元素，会引发异常。
   + 初始化数组元素：
@@ -453,7 +460,8 @@
     ```
   + 多维数组：规则数组，<font color = blue>不规则数组</font>
   + <font color = blue>数组的界</font>
-+ <font color = blue>索引器</font>：索引器的作用在于可以用我们熟悉的方括号语法访问类中的集合，索引器是一种特殊的属性，<font color = red>有get()和set()访问方法指定其行为</font>
+
++ 索引器：索引器的作用在于可以用我们熟悉的方括号语法访问类中的集合，索引器是一种特殊的属性，<font color = red>有get()和set()访问方法指定其行为</font>
 
   + 在类中声明索引器属性：`类型 this[类型 参数] {get;set;}`
       ```csharp
@@ -505,4 +513,41 @@
   + <font color = blue>其它类型的值作为索引：c#不要求必须用整数值作为集合的索引</font>
 + <font color = blue>集合接口</font>，可以在接口声明中使用实际类型（如int或string）替换泛型类型(<T>)
   + IEnumerable<T>接口，可通过其实现foreach()语句
-  
+  + Icomparable，实现对象排序
++ List<T>:List是可按需动态增长的数组
+
+| List主要方法或属性 | 说明             |
+|-------------------|------------------|
+| Capacity          | 用于获取或设置List可容纳的元素数目，当数量超过容量时，这个值可自动增加。可以设置这个值以减少重新分配的次数，也可调用trim()将此值减少为实际的Count |
+| Count             | 用于回去List中当前元素数量 |
+| Item()            | 获取或设置指定索引处的元素 |
+| Add()             | 在List中添加一个元素 |
+| AddRange()        | 将一个ICollection的元素添加到List结尾 |
+| AsReadOnly()      | 返回当前实例的一个只读实例 |
+| BinarySearch()    | 使用二分搜寻寻找已排序List中的特定元素 |
+| Clear()           | 删除List中的所有元素 |
+| Contains()        | 确定一个元素是否在List中 |
+| ConvertAll()      | 将当前List中的所有元素转换为另一类型 |
+| CopyTo()          | 将一个List复制到一个一位数组中 |
+| Exists()          | 确定List中是否包含与指定谓词匹配的元素 |
+| Find()            | 返回与指定谓词匹配的元素在List中的第一次出现（元素） |
+| FindAll()         | 返回与指定谓词匹配的所有元素 |
+| FindIndex()       | 返回与指定谓词匹配的元素在List中的第一次出现的索引 |
+| FindLast()        | 返回与指定谓词匹配的元素在List中的最后一次出现（元素） |
+| FindLastIndex()   | 返回与指定谓词匹配的元素在List中的最后一次出现的索引 |
+| ForEach()         | 遍历List中的所有元素，进行一定操作 |
+| GetEnumerator()   | 用于返回遍历List的枚举器 |
+| GetRange()        | 复制某个范围的元素到新List |
+| IndexOf()         | 用于返回某个值在一个List或其一部分中的第一次出现的索引 |
+| Insert()          | 在List中插入元素 |
+| InsertRange()     | 在List中插入一个集合的元素 |
+| LastIndexOf()     | 用于返回某个值在一个List或其一部分中的第=最后一次出现的索引 |
+| Remove()          | 删除某个对象的第一次出现（元素） |
+| RemoveAll()       | 删除某个对象的所有出现（元素） |
+| RemoveAt()        | 删除指定索引处的元素 |
+| RemoveRange()     | 删除某范围内的元素 |
+| Reverse()         | 翻转List中元素的顺序 |
+| Sort()            | 将List排序 |
+| ToArray()         | 将List中的元素复制到新数组 |
+| TrimExcess()      | 减小List的容量到当前所包含的元素的实际数目 |
+| TrimToSize()      | 将容量设置为List中元素的实际数目（TrimToSize()只能用在ArrayList、Queue、SortedList等几个非泛型集合中；在泛型集合中，TrimExcess()的功能与TrimToSize()类似。） |
