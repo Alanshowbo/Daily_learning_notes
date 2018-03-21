@@ -156,14 +156,20 @@ rostopic type 命令用来查看所发布话题的**消息**类型
   ```
 e.g
   ```
-  $ rostopic type /turtle1/command_velocity
-  turtlesim/Velocity
+  $ rostopic type /turtle1/cmd_vel
+  geometry_msgs/Twist
   ```
 可以使用**rosmsg**命令来查看消息的详细情况:
   ```
-  $ rosmsg show turtlesim/Velocity
-  float32 linear
-  float32 angular
+  $ rosmsg show geometry_msgs/Twist
+  geometry_msgs/Vector3 linear
+    float64 x
+    float64 y
+    float64 z
+  geometry_msgs/Vector3 angular
+    float64 x
+    float64 y
+    float64 z
   ```
 #### rostopic pub
 rostopic pub可以把数据发布到当前某个正在广播的话题上:
@@ -172,11 +178,11 @@ rostopic pub可以把数据发布到当前某个正在广播的话题上:
   ```
 e.g
   ```
-  rostopic pub -1 /turtle1/command_velocity turtlesim/Velocity  -- 2.0  1.8
+  rostopic pub -1 /turtle1/cmd_vel geometry_msgs/Twist -- '[2.0, 0.0, 0.0]' '[0.0, 0.0, 1.8]'
   ```
 -1（单个破折号）这个参数选项使rostopic发布一条消息后马上退出(once).
   ```
-  rostopic pub /turtle1/command_velocity turtlesim/Velocity -r 1 -- 2.0  -1.8
+  rostopic pub -1 /turtle1/cmd_vel geometry_msgs/Twist -r 1 -- '[2.0, 0.0, 0.0]' '[0.0, 0.0, 1.8]'
   ```
 这条命令以1Hz的频率发布速度命令到速度话题上. -r命令(rate).
 #### rqt_plot
@@ -190,3 +196,85 @@ rqt_plot命令可以实时显示一个发布到某个话题上的数据变化图
 + rosservice type         输出服务类型
 + rosservice find         依据类型寻找服务find services by service type
 + rosservice uri          输出服务的ROSRPC uri
+```
+rosservice call [service] [args]
+```
+e.g
+  ```
+  rosservice call clear
+  ```
+查看再生（spawn）服务的信息:
+  ```
+  $ rosservice type spawn| rossrv show
+  float32 x
+  float32 y
+  float32 theta
+  string name
+  ---
+  string name
+  ```
+这个服务使我们可以在给定的位置和角度生成一只新的乌龟。名字参数是可选的:
+  ```
+  rosservice call spawn 2 2 0.2 ""
+  ```
+服务返回了新产生的乌龟的名字：
+  ```
+  name: turtle2
+  ```
+### rossrv
++ rossrv show	 Show service description
++ rossrv list	 List all services
++ rossrv md5	 Display service md5sum
++ rossrv package	 List services in a package
++ rossrv packages	 List packages that contain services
+### rosparam
+rosparam能够存储并操作ROS 参数服务器（Parameter Server）上的数据。参数服务器能存储整型、浮点、布尔、字符串、字典和列表等数据类型。rosparam使用YAML标记语言的语法。一般而言，YAML的表述很自然：1 是整型, 1.0 是浮点型, one是字符串, true是布尔, [1, 2, 3]是整型列表, {a: b, c: d}是字典. rosparam有很多指令可以用来操作参数，如下所示:
++ rosparam set [param_name]               设置参数
++ rosparam get [param_name]               获取参数,使用`rosparam get /`来显示参数服务器上的所有内容
++ rosparam load [file_name] [namespace]   从文件读取参数
++ rosparam dump [file_name]               向文件中写入参数
++ rosparam delete                         删除参数
++ rosparam list                           列出参数名
+`rosparam dump`, `rosparam load`可存储信息以备重新读取.
+
+## rqt_console & roslaunch
+绍如何使用rqt_console和rqt_logger_level进行调试，以及如何使用roslaunch同时运行多个节点.
+### rqt_console & rqt_logger_level
+rqt_console属于ROS日志框架(logging framework)的一部分，用来显示节点的输出信息。
+  ```
+  rosrun rqt_console rqt_console
+  ```
+rqt_logger_level允许修改节点运行时输出信息的日志等级（logger levels）（包括 Debug、Warn、Info和Error）
+  ```
+  rosrun rqt_logger_level rqt_logger_level
+  ```
+日志等级按以下优先顺序排列：
+  ```
+  Fatal
+  Error
+  Warn
+  Info
+  Debug
+  ```
+Fatal是最高优先级，Debug是最低优先级。通过设置日志等级你可以获取该等级及其以上优先等级的所有日志消息。比如，将日志等级设为Warn时，你会得到Warn、Error和Fatal这三个等级的所有日志消息。
+
+### roslaunch
+roslaunch可以用来启动定义在launch文件中的多个节点:
+  ```
+  roslaunch [package] [filename.launch]
+  ```
+**launch文件编写**
+
+## rosed编辑ROS中的文件
+rosed是rosbash 的一部分。利用它可以直接通过package名来获取到待编辑的文件而无需指定该文件的存储路径.
+  ```
+  rosed [package_name] [filename]
+  ```
+rosed默认的编辑器是vim。如果想要将其他的编辑器设置成默认的，需要修改你的 ~/.bashrc 文件，增加如下语句:
+  ```
+  export EDITOR='emacs -nw'
+  ```
+这将emacs设置成为默认编辑器。
+
+
+
