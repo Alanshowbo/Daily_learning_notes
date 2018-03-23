@@ -51,7 +51,7 @@ Created 2018/03/18
 #### 间接依赖
 许多情况下，依赖也有它的依赖,如:
   ```
-  $ rospack depends1 rospy
+  $ rospack depends rospy
   genpy
   roscpp
   rosgraph
@@ -222,11 +222,11 @@ e.g
   name: turtle2
   ```
 ### rossrv
-+ rossrv show	 Show service description
-+ rossrv list	 List all services
-+ rossrv md5	 Display service md5sum
-+ rossrv package	 List services in a package
-+ rossrv packages	 List packages that contain services
++ rossrv show	  Show service description
++ rossrv list	  List all services
++ rossrv md5	  Display service md5sum
++ rossrv package	  List services in a package
++ rossrv packages	  List packages that contain services
 ### rosparam
 rosparam能够存储并操作ROS 参数服务器（Parameter Server）上的数据。参数服务器能存储整型、浮点、布尔、字符串、字典和列表等数据类型。rosparam使用YAML标记语言的语法。一般而言，YAML的表述很自然：1 是整型, 1.0 是浮点型, one是字符串, true是布尔, [1, 2, 3]是整型列表, {a: b, c: d}是字典. rosparam有很多指令可以用来操作参数，如下所示:
 + rosparam set [param_name]               设置参数
@@ -276,5 +276,145 @@ rosed默认的编辑器是vim。如果想要将其他的编辑器设置成默认
   ```
 这将emacs设置成为默认编辑器。
 
+## 创建ROS消息和ROS服务
++ 消息(msg): msg文件就是一个描述ROS中所使用消息类型的简单文本。它们会被用来生成不同语言的源代码。
++ 服务(srv): 一个srv文件描述一项服务。它包含两个部分：请求和响应。
+msg文件存放在package的msg目录下，srv文件则存放在srv目录下。
+msg文件实际上就是每行声明一个数据类型和变量名。可以使用的数据类型如下：
+  ```
+  int8, int16, int32, int64 (plus uint*)
+  float32, float64
+  string
+  time, duration
+  other msg files
+  variable-length array[] and fixed-length array[C]
+  ```
+在ROS中有一个特殊的数据类型：Header，它含有时间戳和坐标系信息。在msg文件的第一行经常可以看到Header header的声明.
+
+srv文件分为请求和响应两部分，由'---'分隔。下面是srv的一个样例：
+  ```
+  int64 A
+  int64 B
+  ---
+  int64 Sum
+  ```
+其中 A 和 B 是请求, 而Sum 是响应
+### 使用 msg
+#### 创建 msg
+  ```
+  $ cd ~/catkin_ws/src/beginner_tutorials
+  $ mkdir msg
+  $ echo "int64 num" > msg/Num.msg
+  ```
+接下来，还有关键的一步：我们要确保msg文件被转换成为C++，Python和其他语言的源代码：
+1. 查看package.xml, 确保它包含一下两条语句:
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+在构建的时候，只需要"message_generation"。然而，在运行的时候，需要"message_runtime"。
+2. 在 CMakeLists.txt文件中，利用find_packag函数，增加对message_generation的依赖，这样就可以生成消息了。你可以直接在COMPONENTS的列表里增加message_generation(有时候你会发现，即使你没有调用find_package,你也可以编译通过。这是因为catkin把你所有的package都整合在一起，因此，如果其他的package调用了find_package，你的package的依赖就会是同样的配置。但是，在你单独编译时，忘记调用find_package会很容易出错。)：
+    ```
+    # Do not just add this line to your CMakeLists.txt, modify the existing line
+    find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation)
+    ```
 
 
+3. 同样，你需要确保你设置了运行依赖：
+    ```
+    catkin_package(
+      ...
+      CATKIN_DEPENDS message_runtime ...
+      ...)
+    ```
+4. 找到`add_message_files`代码块,去掉注释符号#，用你的.msg文件替代Message*.msg:
+    ```
+    add_message_files(
+      FILES
+      Num.msg
+    )
+    ```
+5. 手动添加.msg文件后，我们要确保CMake知道在什么时候重新配置我们的project。 确保添加了如下代码:
+    ```
+    generate_messages()
+    ```
+现在，你可以生成自己的消息源代码了。
+#### 使用 rosmsg
+  ```
+  $ rosmsg show beginner_tutorials/Num
+  int64 num
+  $ rosmsg show Num
+  [beginner_tutorials/Num]:
+  int64 num
+  ```
+### 使用 srv
+#### 创建一个srv
+  ```
+  $ roscd beginner_tutorials
+  $ mkdir srv
+  ```
+使用roscp从其他的package中复制一个服务:
+  ```
+  $ roscp [package_name] [file_to_copy_path] [copy_path]
+  ```
+同样要确保srv文件被转换成C++，Python和其他语言的源代码:
+1. 同样在CMakeLists.txt文件中增加了对message_generation的依赖,message_generation 对msg和srv都起作用
+2. 找到`add_service_files`代码块,去掉注释符号#，用你自己的srv文件名替换掉那些Service*.srv文件:
+    ```
+    add_service_files(
+      FILES
+      AddTwoInts.srv
+    )
+    ```
+现在，你可以生成自己的服务源代码了。
+#### 使用 rossrv
+```
+$ rossrv show beginner_tutorials/AddTwoInts 
+int64 a
+int64 b
+---
+int64 sum
+
+$ rossrv show AddTwoInts
+[beginner_tutorials/AddTwoInts]:
+int64 a
+int64 b
+---
+int64 sum
+
+[rospy_tutorials/AddTwoInts]:
+int64 a
+int64 b
+---
+int64 sum
+```
+### msg和srv都需要的步骤
+接下来，在CMakeLists.txt中找到如下部分:
+  ```
+  # generate_messages(
+  #   DEPENDENCIES
+  # #  std_msgs  # Or other packages containing msgs
+  # )
+  ```
+去掉注释并附加上所有你消息文件所依赖的那些含有.msg文件的package（这个例子是依赖std_msgs,不要添加roscpp,rospy)，结果如下:
+  ```
+  generate_messages(
+    DEPENDENCIES
+    std_msgs
+  )
+  ```
+由于增加了新的消息，所以我们需要重新编译我们的package：
+  ```
+  # In your catkin workspace
+  $ cd ../..
+  $ catkin_make
+  $ cd -
+  ```
+所有在msg路径下的.msg文件都将转换为ROS所支持语言的源代码。生成的C++头文件将会放置在~/catkin_ws/devel/include/beginner_tutorials/。 Python脚本语言会在 ~/catkin_ws/devel/lib/python2.7/dist-packages/beginner_tutorials/msg 目录下创建。 lisp文件会出现在 ~/catkin_ws/devel/share/common-lisp/ros/beginner_tutorials/msg/ 路径下.
+### 回顾
++ rospack = ros+pack(age): provides information related to ROS packages
++ rosstack = ros+stack: provides information related to ROS stacks
++ roscd = ros+cd: changes directory to a ROS package or stack
++ rosls = ros+ls: lists files in a ROS package
++ roscp = ros+cp: copies files from/to a ROS package
++ rosmsg = ros+msg: provides information related to ROS message definitions
++ rossrv = ros+srv: provides information related to ROS service definitions
++ rosmake = ros+make: makes (compiles) a ROS package
