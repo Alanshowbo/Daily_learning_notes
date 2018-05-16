@@ -1,0 +1,10 @@
++ obstacle 障碍物
++ anticipate 预测
++ perception 感知
++ perceive 认为，意识到，注意到
++ spatio-temporal 时空的
++ query 质询
++ ad-hoc 点对点
++ steering 转向
++ chassis 车辆底座
++ implementation 落实，执行
