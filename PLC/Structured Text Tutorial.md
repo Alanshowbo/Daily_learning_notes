@@ -3,6 +3,7 @@
 
 ## Elementary data types
 + Integers
+
   IEC Data Type | Format | Range 
   - | - | -
   SINT | Short Integer |-128 ~ 127(-2^7 ~ 2^7-1)
@@ -14,11 +15,13 @@
   LDINT | Long Double Integer |0 ~ 2^32-1
   ULINT | Unsigned Long Integer |0 ~ 2^64-1
 + Floating points
+
   IEC Data Type | Format | Range
   - | - | -
   REAL | Real Numbers | ±10^±38
   LREAL | Long Real Numbers | 	±10^±308
 + Time
+
   IEC Data Type | Format | Range
   - | - | -
   TIME	| Duration of time after an event	| T#10d4h38m57s12ms or TIME#10d4h38m
@@ -26,10 +29,12 @@
   TIME_OF_DAY	| Time of day |	TOD#14:32:07 or TIME_OF_DAY#14:32:07.77
   DATE_AND_TIME	| Date and time of day |DT#1989-06-15-13:56:14.77 or DATE_AND_TIME#1989-06-15-13:56:14.77
 + Strings
+
   IEC Data Type | Format | Range
   - | - | -
   STRING | Character String | ‘My string’
 + Bit strings
+
   IEC Data Type | Format | Range
   - | - | -
   BOOL |	Boolean	| 1 bit
@@ -46,6 +51,7 @@ The derived data types are your own custom data types. All the derived data type
 + Array data types
 
 ## Operators
+
 Operation | Symbol | Precedence
 - | - | -
 Parenthesization(括号) | (expression) |	Highest
