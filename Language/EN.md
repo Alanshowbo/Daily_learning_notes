@@ -8,3 +8,9 @@
 + steering 转向
 + chassis 车辆底座
 + implementation 落实，执行
++ syntax 句法，句法规则，语构
++ colons 冒号
++ semicolons 分号
++ case-sensitive 区分大小写
++ delimit 界定
++ reserved 预留的，内向的，矜持的
