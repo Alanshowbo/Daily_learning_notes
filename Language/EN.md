@@ -15,11 +15,15 @@
 + delimit 界定
 + reserved 预留的，内向的，矜持的
 + distortion 扭曲，歪曲
-+ Extraction 提取，开采，提炼
++ extraction 提取，开采，提炼
 + nonetheless 尽管如此
-+ Histogram 直方图，矩阵图
-+ Histogram of Oriented Gradients(HOG) 方向梯度直方图
++ histogram 直方图，矩阵图
++ histogram of Oriented Gradients(HOG) 方向梯度直方图
 + pipeline 渠道，(地下)管道，传递途径，酝酿中
 + Model Predictive Control(MPC) 模型预测控制
-+ Azimuth 地平经度
-+ Azimuthal 方位角的
++ azimuth 地平经度
++ azimuthal 方位角的
++ diagnostic 诊断，诊断程序，诊断的
++ pedal 踏板，踩踏板，骑自行车
++ proportional 相称的；成比例的；均衡的
+
