@@ -74,25 +74,96 @@
 
 ---
 ## Chapter 4 复合类型
-+ 数组：
-  + 声明：`typeName arrayName[arraySize]`;声明中arraySize不能是变量，可以用new运算符来规避这种限制；
-  + sizeof运算符用于返回类型或数据对象的长度，如果将sizeof用于数组名，得到的是整个数组的字节数；
-  + *只有在数组定义时才能初始化，以后就不能使用了，也不能将一个数组赋给另一数组*，如果只对数组一部分初始化，则其它元素为0；如果初始化数组时[]中为空，编译器会自动计算元素个数；
-+ 字符串：
-  + C++处理字符串方式有两种：来自C语言的C-Style string、基于string类库的方法；
-  + C-style string：
-    + C-style string具有特殊性质，以空字符结尾，空字符被写作`\0`，用来标记字符串的结尾
-      ```
-      char dog[8]={'d','o','g',`e`};
-      char cat[8]={'c','a','t','\0'};
-      ```
-      使用cout打印dog数组（不是字符串），打印完4个字符后，会接着将内存中随后的字节解释为要打印的字符，直至遇到空字符；
-    + 用引号括起的字符串隐式地包含结尾的空字符，不必显式地包括它；
-    + 字符串常量（双引号）不能与字符常量（单引号）互换
-      ```
-      char shirt_size = 'S'; //correct
-      char shirt_size = "S"; //error, "S"表示两个字符：'S'和'\0'
-      ```
-    + 拼接字符串：第一个字符串的\0将被第二个字符串的第一个字符取代；
-    + strlen()可返回存储在数组中的字符串长度；
-    + 字符串输入
+### 4.1 数组：
++ 声明：`typeName arrayName[arraySize]`;声明中arraySize不能是变量，可以用new运算符来规避这种限制；
++ sizeof运算符用于返回类型或数据对象的长度，如果将sizeof用于数组名，得到的是整个数组的字节数；
++ *只有在数组定义时才能初始化，以后就不能使用了，也不能将一个数组赋给另一数组*，如果只对数组一部分初始化，则其它元素为0；如果初始化数组时[]中为空，编译器会自动计算元素个数；
+### 4.2 字符串：
++ C++处理字符串方式有两种：来自C语言的C-Style string、基于string类库的方法；
++ C-style string：
+  + C-style string具有特殊性质，以空字符结尾，空字符被写作`\0`，用来标记字符串的结尾
+    ```
+    char dog[8]={'d','o','g',`e`};
+    char cat[8]={'c','a','t','\0'};
+    ```
+    使用cout打印dog数组（不是字符串），打印完4个字符后，会接着将内存中随后的字节解释为要打印的字符，直至遇到空字符；
+  + 用引号括起的字符串隐式地包含结尾的空字符，不必显式地包括它；
+  + 字符串常量（双引号）不能与字符常量（单引号）互换
+    ```
+    char shirt_size = 'S'; //correct
+    char shirt_size = "S"; //error, "S"表示两个字符：'S'和'\0'
+    ```
+  + 拼接字符串：第一个字符串的\0将被第二个字符串的第一个字符取代；
+  + strlen()可返回存储在数组中的字符串长度, sizeof()返回整个数组的长度；
+  + 字符串输入
+    + cin使用空白确定字符串的结束位置（空格、制表符、换行符），每次只能读取一个单词
+    + 整行输入采用cin.getline()，getline使用换行符来确定行尾，存储字符串时使用空字符来替换换行符
+### 4.3 string类
++ #include <string>
++ 可以使用数组表示法来访问存储在string对象中的字符
++ 确定字符串中的字符数：
+  ```
+  int len1 = str1.size();
+  int len2 = strlen(charr);
+  ```
++ string IO:
+  ```
+  string str;
+  getline(cin,str); //此处的getline不是cin对象的方法
+  ```
++ 其它形式的字符串字面值：
+  + 使用前缀L、u、U表示wchar_t、char16_t、char32_t
+  ```
+  wchar_t title[] = L"Chief";
+  char16_t name[] = u"Felonia";
+  char32_t car[] = "Audi";
+  ```
+  + 原始字符串（raw）:在原始字符串中，字符表示的就是自己，无需使用繁琐的转义字符：使用前缀R和"( )"
+  ```
+  cout<<R"("This line" uses "\n" instead od endl)"<<endl; //输出"This line" uses "\n" instead od endl
+  ```
+### 4.4 结构简介
++ 定义：
+  ```
+  struct mystruct
+  {
+    char name[20];
+    float length;
+    double price;
+  };
+  ```
++ 相比c语言，c++允许在声明结构变量时省略关键字struct
++ 使用.操作符访问结构成员
++ 可以同时完成结构体定义和结构体变量创建的工作：将变量名放在结束括号后.
++ 结构中的位字段：与c语言一样，c++也允许指定占用特定位数的结构成员，这使得创建与某个硬件设备上的寄存器对应的数据结构非常方便。还可以使用没有名称的字段来提供间距。
+  ```
+  struct torgle_register
+  {
+    unsigned int SN : 4;
+    unsigned int : 4;
+    bool goodIn : 1;
+    bool goodTorgle : 1;
+  }
+  ```
+### 4.5 共用体
+共用体（union）是一种数据格式，它能够存储不同的数据类型，但只能同时存储其中一种类型。当数据项使用两种或更多类型时，可节省空间。
+  ```
+  union one4all
+  {
+    int int_val;
+    long long_val;
+    double double_val;
+  };
+  ```
+### 4.6 枚举
+c++的enum工具提供了另一种创建符号常量的方式，这种方式可替代const。
+```
+enum spectrum {Red, orange, yello, green, blue, violet, indigo, ultraviolet};
+```
+上面的语句完成两项工作：
++ 让spectrum成为新类型的名称；
++ 将red、yellow等作为符号常量，它们对应整数值0~7；这些量成为枚举量(enumerator)
+```
+spectrum band;
+band = blue;
+```
