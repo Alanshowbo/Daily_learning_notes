@@ -12,7 +12,7 @@
 ## MSOP Packet 
 MSOP包完成三维测量相关数据输出，包括激光测距值、回波的反射率值、水平旋转角度值和时间戳。MSOP包的有效载荷长度为1248字节，其中42byte 的同步帧头Header，1200byte 的数据块区间（共12个100byte 的data block），以及6byte 帧尾Tail。数据包的基本结构如下图所示：
 
-<img src="./img/MSOP Packet.PNG" class="aligncenter" width=500 />
+<center> <img src="./img/MSOP Packet.PNG" class="aligncenter" width=500 /> </center>
 
 ### Header
 + 帧头Header 共42byte，用于识别出数据的开始位置。
@@ -29,7 +29,7 @@ MSOP包完成三维测量相关数据输出，包括激光测距值、回波的�
 #### channel data
 channel data 是3byte，高两字节共16 位，其中0-14 位用于距离信息存储，最高位作为组标志位；低一字节用于表示反射率信息，如下图：
 
-<img src="./img/Channel Block.PNG" class="aligncenter" width=400 />
+<center> <img src="./img/Channel Block.PNG" class="aligncenter" width=400 /> </center>
 
 Distance 是2byte，单位为cm，分辨率是1cm。反射率信息为相对反射率，通过反射率信息可以完成对不材质物体的区分。
 
@@ -37,5 +37,5 @@ Distance 是2byte，单位为cm，分辨率是1cm。反射率信息为相对反�
 帧尾（Tail）长度6byte，4byte 位预留信息，2byte 的0x00，0xFF。
 
 ## 示例
-<img src="./img/Data_Block_Example.PNG" class="aligncenter" width=800 />
+<center> <img src="./img/Data_Block_Example.PNG" class="aligncenter" width=800 /> </center>
 
