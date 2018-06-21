@@ -26,4 +26,12 @@
 + diagnostic 诊断，诊断程序，诊断的
 + pedal 踏板，踩踏板，骑自行车
 + proportional 相称的；成比例的；均衡的
-
++ pseudocode 伪代码
++ label 标签，符号，贴标签于
++ annotate 注释，注释者
++ explicitly 明白地，明确地
++ whilst 同时
++ interpolate 插入
++ extent 程度，长度
++ intersect 横断，横切
++ compound 复合，混合

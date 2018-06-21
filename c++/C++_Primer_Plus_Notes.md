@@ -53,12 +53,12 @@
     + char是另一种整型
     + **转义序列**，p50
     + 宽字符类型，Unicode，char16_t(16位)、char32_t(32位), 使用前缀u表示char16_t 常量，使用前缀U表示char16_t 常量
-        ```
+        ```cpp
         char16_t ch1 = u'q';
         char32_t ch2 = U'P';
         ```
     + const限定符：符号名称指明了常量表示的内容，若果在多个地方使用到一个常量，则需要修改此常量时，只要修改一个符号定义即可
-        ```
+        ```cpp
         const type name = value;
         ```
       在声明中应对const进行初始化，否则常量的值不确定，且无法修改
@@ -82,14 +82,14 @@
 + C++处理字符串方式有两种：来自C语言的C-Style string、基于string类库的方法；
 + C-style string：
   + C-style string具有特殊性质，以空字符结尾，空字符被写作`\0`，用来标记字符串的结尾
-    ```
+    ```cpp
     char dog[8]={'d','o','g',`e`};
     char cat[8]={'c','a','t','\0'};
     ```
     使用cout打印dog数组（不是字符串），打印完4个字符后，会接着将内存中随后的字节解释为要打印的字符，直至遇到空字符；
   + 用引号括起的字符串隐式地包含结尾的空字符，不必显式地包括它；
   + 字符串常量（双引号）不能与字符常量（单引号）互换
-    ```
+    ```cpp
     char shirt_size = 'S'; //correct
     char shirt_size = "S"; //error, "S"表示两个字符：'S'和'\0'
     ```
@@ -102,29 +102,29 @@
 + #include <string>
 + 可以使用数组表示法来访问存储在string对象中的字符
 + 确定字符串中的字符数：
-  ```
+  ```cpp
   int len1 = str1.size();
   int len2 = strlen(charr);
   ```
 + string IO:
-  ```
+  ```cpp
   string str;
   getline(cin,str); //此处的getline不是cin对象的方法
   ```
 + 其它形式的字符串字面值：
   + 使用前缀L、u、U表示wchar_t、char16_t、char32_t
-  ```
+  ```cpp
   wchar_t title[] = L"Chief";
   char16_t name[] = u"Felonia";
   char32_t car[] = "Audi";
   ```
   + 原始字符串（raw）:在原始字符串中，字符表示的就是自己，无需使用繁琐的转义字符：使用前缀R和"( )"
-  ```
+  ```cpp
   cout<<R"("This line" uses "\n" instead od endl)"<<endl; //输出"This line" uses "\n" instead od endl
   ```
 ### 4.4 结构简介
 + 定义：
-  ```
+  ```cpp
   struct mystruct
   {
     char name[20];
@@ -136,7 +136,7 @@
 + 使用.操作符访问结构成员
 + 可以同时完成结构体定义和结构体变量创建的工作：将变量名放在结束括号后.
 + 结构中的位字段：与c语言一样，c++也允许指定占用特定位数的结构成员，这使得创建与某个硬件设备上的寄存器对应的数据结构非常方便。还可以使用没有名称的字段来提供间距。
-  ```
+  ```cpp
   struct torgle_register
   {
     unsigned int SN : 4;
@@ -147,7 +147,7 @@
   ```
 ### 4.5 共用体
 共用体（union）是一种数据格式，它能够存储不同的数据类型，但只能同时存储其中一种类型。当数据项使用两种或更多类型时，可节省空间。
-  ```
+  ```cpp
   union one4all
   {
     int int_val;
@@ -157,13 +157,13 @@
   ```
 ### 4.6 枚举
 c++的enum工具提供了另一种创建符号常量的方式，这种方式可替代const。
-```
-enum spectrum {Red, orange, yello, green, blue, violet, indigo, ultraviolet};
+```cpp
+enum spectrum {Red, orange, yellow, green, blue, violet, indigo, ultraviolet};
 ```
 上面的语句完成两项工作：
 + 让spectrum成为新类型的名称；
 + 将red、yellow等作为符号常量，它们对应整数值0~7；这些量成为枚举量(enumerator)
-```
+```cpp
 spectrum band;
 band = blue;
 ```
