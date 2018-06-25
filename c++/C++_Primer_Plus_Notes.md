@@ -167,3 +167,81 @@ enum spectrum {Red, orange, yellow, green, blue, violet, indigo, ultraviolet};
 spectrum band;
 band = blue;
 ```
+### 4.7 指针和自由存储空间
++ 指针是一个变量，其存储的是值的地址，而不是值本身，对常规变量使用&运算符获取其地址；
++ *运算符，被称为间接值，将其应用于指针，可得到该地址处存储的值；
++ 指针声明：
+  ```cpp
+  int higgens = 5;
+  int * pt = &higgens;
+  ```
++ 指针的危险：c++创建指针时，会分配用来储存地址的内存，但不会分配指针所指向的数据的内存；
+  ```cpp
+  long * fellow;
+  *fellow = 22333; //错误
+  ```
++ 使用new在程序运行时分配内存：
+  ```cpp
+  int * pt = new int;
+  *pt = 1001;
+  ``` 
++ delete释放内存：
+  + 使用delete时，后面加上指向内存块的指针（这些内存块最初是用new分配的）
+  ```cpp
+  int * pt = new int;
+  ...
+  delete pt;//释放pt指向的内存，不删除pt本身
+  ```
+  + new和delete一定要配合使用
+  + 不要尝试释放已释放的内存块
++ 使用new创建动态数组：通常对于大型数据使用new，是new的用武之地
+  + 假设程序是否需要用到数组取决于其运行时用户提供的信息，若通过声明创建数组，则不管是否用到数组都占用了内存，在编译时给数组分配内存成为静态联编
+  + 使用new时，在程序运行时有需要才创建数组，且可以在程序运行时选择数组长度，这类称之为动态联编，这类数组称为动态数组
+  + 静态联编必须在声明时指定数组长度，动态联编则在程序运行时确定数组长度
+  + 使用new创建动态数组：
+    ```cpp
+    int * psome = new int[10];//new运算符返回第一个元素地址，该地址被赋予指针psome
+    ...
+    delete [] psome;//使用new[]分配内存，也必须用delete[]来释放
+    ```
+    ```
+    int size;
+    cin>>size;
+    int * pt1 = new int [size];
+    ...
+    delete [] pt1;
+    ```
+  + 无法使用sizeof来确定动态数组的字节数
+  + 数组和指针基本等价：通过指针来访问动态数组，如`psome[0]`来访问上述数组第一个元素，ar[i]被解释为`*(ar+i)`,ar为数组第一个元素地址。
++ 指针算数：将指针增加1，增加的量等于其指向的类型的字节数
++ 指针和字符串：如果给cout提供一个指针，将打印地址，但如果指针类型是char *，将打印指向的字符串，必须使用强制类型转换才能显示地址
++ 使用new创建动态结构：创建一个未命名的inflatable类型，将其地址赋予一个指针：
+  ```
+  inflatable *pt = new inflatable；
+  ```
+  比较麻烦的是访问动态结构的成员，不能将.运算符作用于动态结构名，c++使用->运算符访问成员，如`pt->price`是被指向结构的price成员
++ **自动存储、静态存储、动态存储**
++ 数组的替代品：
+  + 动态数组模板类Vector：
+    ```cpp
+    vector<typeNme> vt(n_elem);
+    ```
+    ```cpp
+    #include <vector>
+    using namespace std;
+    vector<int> vi;  //int空数组
+    int n;
+    cin>>n;
+    vector<double> vd(n);  //double数组
+    ```
+    Vector自动完成new、delete操作，效率稍低；
+  + 模板类array：
+    array长度固定，但相比数组更加安全
+    ```cpp
+    array<typeNmae, n_elem> arr;
+    ```
+    ```cpp
+    #include <array>
+    array<int, 5> arr1;
+    array<double, 3> arr2 = {1.0, 2.0, 3.0};
+    ```
