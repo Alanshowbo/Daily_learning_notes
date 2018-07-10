@@ -13,7 +13,7 @@
     CC usingmath.c -lm
     ```
 + 编译多个源文件，只需将它们全部放到命令行：
-    ```
+    ```bash
     g++ my_1.cpp my_2.cpp
     ```
 ---
@@ -30,7 +30,6 @@
 + `#include <cmath>`
 + 在多函数程序中使用using编译指令，可将其放在函数外部（如前面）；
 + `cin`和`cout`为用于处理输入和输出的预定义对象，它们是istream和ostream类的实例；`cin`和`cout`是智能对象，可依据上下文自动将信息从一种形式转化为另一种形式。
-
 ---
 
 ## Chapter 3 处理数据
@@ -76,7 +75,6 @@
     + 传递参数时的转换；
     + 强制类型转换；
     + auto声明：c++ 11新增了auto，让编译器能够依据初始值的类型推断变量的类型。实用auto声明而不指定变量类型，编译器自动将变量类型设为与初始值相同；处理复杂类型时，自动推断比较有优势。
-
 ---
 
 ## Chapter 4 复合类型
@@ -236,7 +234,7 @@ enum spectrum {Red, orange, yellow, green, blue, violet, indigo, ultraviolet};
 + 指针算数：将指针增加1，增加的量等于其指向的类型的字节数
 + 指针和字符串：如果给cout提供一个指针，将打印地址，但如果指针类型是char *，将打印指向的字符串，必须使用强制类型转换才能显示地址
 + 使用new创建动态结构：创建一个未命名的inflatable类型，将其地址赋予一个指针：
-  ```
+  ```cpp
   inflatable *pt = new inflatable；
   ```
   比较麻烦的是访问动态结构的成员，不能将.运算符作用于动态结构名，c++使用->运算符访问成员，如`pt->price`是被指向结构的price成员
@@ -265,7 +263,6 @@ enum spectrum {Red, orange, yellow, green, blue, violet, indigo, ultraviolet};
     array<int, 5> arr1;
     array<double, 3> arr2 = {1.0, 2.0, 3.0};
     ```
-
 ---
 
 ## Chapter 5 循环和关系表达式
@@ -282,36 +279,612 @@ enum spectrum {Red, orange, yellow, green, blue, violet, indigo, ultraviolet};
     cout<<endl;
     ```
 
-### 递增运算符(++)和递减运算符(--)
++ 省略for循环中的测试表达式时，测试结果为true，程序会一直运行：
 
-+ 前缀和后缀对操作数的影响是一样的，但影响时间不同；
-+ a++意味着使用a当前的值计算表达式，然后将a的值加1；++b意味着先将b的值加1，然后使用新的值计算表达式；
-+ 副作用和顺序点：
-  + 副作用(side effect)是指在计算表达式时对某些东西进行了修改；
-  + 顺序点是程序中的一个点，在这里，进入下一步之前将确保对所有副作用进行了评估；
-  + 语句中的分号就是一个顺序点，这意味着在执行下一步程序前，赋值运算法、递增、递减运算符执行的所有修改必须完成
-  + 任何完整表达式（不是另一个更大表达式的子表达式）的末尾都是一个顺序点
-    ```cpp
-    while(guests++<10)
-        cout<<guests<<endl;//程序输出结果为11，递增运算符副作用在执行cout之前完成
-    ```
-+ 递增/递减运算符和指针
-  + 前缀递增、递减和解除引用运算符的优先级相同，以从右到左的方式结合
-  + 后缀递增、递减运算符优先级相同，但比前缀运算符优先级高
-    ```cpp
-    double arr[5] = {21.1, 32.8, 23.4, 45.2, 37.4};
-    double *pt = arr; //pt指向arr[0]
-    ++pt;//pt指向arr[1]
-    double x = *++pt; //pt指向arr[2]，x为23.4
-    ++*pt; //pt仍指向arr[2]，先取得pt指向的值，然后增加至24.4
-    (*pt)++; //先对指针解除引用，再加1得到25.4，pt仍指向arr[2]
-    x = *pt++; //后缀运算符优先级更高，故++作用于pt，而不是*pt，后缀运算符意味着x的值为arr[2]，即25.4，该语句执行完毕后，pt指向arr[3]
-    ```
+  ```cpp
+  for( ; ; )
+  {
+    cout<<"Hello World!";
+  }
+  ```
+
++ 递增运算符(++)和递减运算符(--)
+  + 前缀和后缀对操作数的影响是一样的，但影响时间不同；
+  + a++意味着使用a当前的值计算表达式，然后将a的值加1；++b意味着先将b的值加1，然后使用新的值计算表达式；
+  + 副作用和顺序点：
+    + 副作用(side effect)是指在计算表达式时对某些东西进行了修改；
+    + 顺序点是程序中的一个点，在这里，进入下一步之前将确保对所有副作用进行了评估；
+    + 语句中的分号就是一个顺序点，这意味着在执行下一步程序前，赋值运算法、递增、递减运算符执行的所有修改必须完成
+    + 任何完整表达式（不是另一个更大表达式的子表达式）的末尾都是一个顺序点
+      ```cpp
+      while(guests++<10)
+          cout<<guests<<endl;//程序输出结果为11，递增运算符副作用在执行cout之前完成
+      ```
+  + 递增/递减运算符和指针
+    + 前缀递增、递减和解除引用运算符的优先级相同，以从右到左的方式结合
+    + 后缀递增、递减运算符优先级相同，但比前缀运算符优先级高
+      ```cpp
+      double arr[5] = {21.1, 32.8, 23.4, 45.2, 37.4};
+      double *pt = arr; //pt指向arr[0]
+      ++pt;//pt指向arr[1]
+      double x = *++pt; //pt指向arr[2]，x为23.4
+      ++*pt; //pt仍指向arr[2]，先取得pt指向的值，然后增加至24.4
+      (*pt)++; //先对指针解除引用，再加1得到25.4，pt仍指向arr[2]
+      x = *pt++; //后缀运算符优先级更高，故++作用于pt，而不是*pt，后缀运算符意味着x的值为arr[2]，即25.4，该语句执行完毕后，pt指向arr[3]
+      ```
 + 逗号表达式允许将两个表达式方法c++只允许放一个表达式的地方，如`for(j=0, i=word.size()-1; j<i; --i, ++j)`
 + 逗号表达式的值是第二部分的值，如`i=20, j = 2*i;`的值为40
 + C-风格字符串比较：word为数组名，要比较数组中的字符串是否为mate：
-  ```
+
+  ```cpp
   word=="mate";//错误
   ```
+
   **数组名是数组的地址**，应使用C-风格字符串库中的strcmp()来比较，该函数接受两个字符串地址作为参数，即参数可以是指针、字符串常量或者字符串数组名。当两字符串相同，strcmp()返回0，否则依据字母顺序"按系统排序"
 + 相比C-风格字符串，string类字符串的比较更加简介，因为类函数重载了比较运算符
+
+### 5.2 while循环
+
++ 逐字符遍历字符串直至遇到空字符，是c++处理C-风格字符串的标准方法：
+
+  ```cpp
+  int Arsize = 20;
+  char name[Arsize];
+  cin>>name;
+  int i = 0;
+  while(name[i]!='\0')
+  {
+    cout<<name[i]<<": "<<int(name[i]);
+    i++;
+  }
+  cout<<endl;
+  ```
++ for与while: for循环一般用于知道循环次数，while一般用于无法预知循环次数的场景
++ 延时：clock()函数，头文件ctime，ctime将clock_t作为clock()返回类型的别名，即将变量定义为clock_t类型，编译器会自动将其转化为long、unsigned int或其它适合系统的类型：
+
+  ```cpp
+  #include <iostream>
+  #include <ctime>
+  int main()
+  {
+    using namespace std;
+    float secs;
+    cin>>secs;
+    delay = secs*CLOCKS_PER_SEC;
+    clock_t start = clock();
+    while(clock() - start < delay)
+      ;
+    cout<<"done"<<endl;
+    return 0;
+  }
+  
+  ```
++ *类型别名*
+
+### 5.3 do while循环
+...
+
+### 5.4 基于范围的for循环（c++ 11）
++ c++ 11新增基于范围（range based）的for循环，简化了一种常见任务：对数组每个元素执行相同操作
+  ```cpp
+  double prices[] = {1, 2, 3, 4};
+  for(double x : prices)
+    cout<<x<<endl;
+  ```
+
+### 5.5 循环和文本输入
++ 逐字符读取来自文件或键盘的文本：
+  ```cpp
+  # include<iostream>
+  int main()
+  {
+    using namespace std;
+    char ch;
+    int count = 0;
+    cout<<"Enter characters, enter # to quit"<<endl;
+    cin>>ch;
+    //cin.get(ch);
+    while(ch!='#')
+    {
+      count++;
+      cout<<ch;
+      cin>>ch;
+      //cin.get(ch);
+    }
+    cout<<count<<" characters read"<<endl;
+    return 0;
+  }
+  ```
+  cin读取char时，会忽略空格与换行符；此外，发送给cin的输入被缓冲，按下回车键后输入的内容才会发送给程序；采用cin.get()可以读取输入中的下一个字符，包括空格
++ 文件尾条件：
+  + *重定向*
+  + cin的eof()和fail()方法：cin.eof()和cin.fail()报告最近读取的结果，因此应放在读取之后：
+
+    ```cpp
+    #include<iostream>
+    int main()
+    {
+      using namespace std;
+      char ch;
+      int count = 0;
+      cin.get(ch);
+      while(cin.fail() == false)
+      {
+        cout<<ch;
+        count++;
+        cin.get(ch);
+      }
+    }
+    ```
+    上面使用了常见的字符输入做法：
+    ```cpp
+    cin.get(ch);
+    while(cin.fail() == false)
+    {
+      ...
+      cin.get(ch);
+    }
+    ```
+    一种更为精简的方法：
+    ```cpp
+    while(cin>>ch)
+    {
+      ...
+    }
+    ```
+    ```cpp
+    while(cin.get(ch))
+    {
+      ...
+    }
+    ```
++ 另一个cin.get()版本：C语言中的I/O函数：getchar()和putchar();
+
+### 5.6嵌套循环和二维数组
+
++ 在输出中使用制表符使数据排列更加规则：'\t'
+---
+
+## 6 分支语句和逻辑运算符
+
+### 6.1 if语句
+
+### 6.2 逻辑表达式
+
+### 6.3 字符函数库 cctype
+`#include<cctype>`
+| 函数名称 | 返回值 |
+|:---|:---|
+|isalnum()|若参数是字母数字，返回true|
+|isalpha()|若参数为字幕，返回true|
+|iscntrl()|若参数是控制字符，返回true|
+|isdigit()|若参数为数字（0~9），返回true|
+|isgraph()|若参数是除空格之外的打印字符，返回true|
+|islower()|若参数为小写字母，返回true|
+|isprint()|若参数为打印字符（包括空格），返回true|
+|ispunct()|若参数是标点符号，返回true|
+|isspace()|若参数为标准空白字符，如空格、进纸、换行、回车、水平、垂直制表符，返回true|
+|isupper()|若参数为大写字母，返回true|
+|isxdigit()|若参数为16进制数字，返回true|
+|tolower()|若参数为大写字母，则返回小写，否则返回原参数|
+|toupper()|若参数为小写字母，则返回大写，否则返回原参数|
+
+### 6.4 ?:运算符
+
++ `expression1 ? expression2 : expression3` 若expression1为true则整个表达式返回expression2的值，否则返回expression3的值
+
+### 6.5 switch语句
+
+```cpp
+switch(integer-expression)
+{
+  case label1 : statement(s)
+  case label2 : statement(s)
+  ...
+  default : statement(s)
+}
+```
+
+一般配合break语句确保只执行语句中的特定部分
+
+### 6.6 break & continue
+
+### 6.7 读取数字的循环
+
+```cpp
+int n
+cin>>n;
+```
+如果输入的n不是数字，而是一个字符串，会发生以下情况：
+
++ n值保持不变；
++ 不匹配的输入被保留在输入队列中；
++ cin对象的一个错误标记被设置；
++ 对cin对象调用将返回false
+
+若要继续输入，需要使用clear()方法重置错误标记
+
+```cpp
+#include"stdafx.h"
+#include<iostream>
+#include<ctime>
+const int MAX = 5;
+int main()
+{
+  using namespace std;
+  int gamescore[MAX];
+  cout<<"Please enter your game scores for "<<MAX<<"rounds"<<endl;
+  int i = 0;
+  for(int i=0; i<MAX; i++)
+  {
+    cout<<"Round "<<i+1<<":"<<endl;
+    while(!(cin>>gamescore[i])) //拒绝、删除格式不符的输入
+    {
+      cin.clear();
+      while(cin.get()!='\n')
+        continue;
+      cout<<"Please enter a number"<<endl;
+    }
+  }
+  int Allscore = 0;
+  for(int i = 0; i<MAX; i++)
+  {
+    Allscore += gamescore[i];
+  }
+  cout<<"Average score:\n"<<Allscore/MAX<<endl;
+  clock_t start = clock();
+  while(clock() - start < 5*CLOCKS_PER_SEC)
+    ;
+  return 0;
+}
+```
+
+### 6.8 简单文件输入/输出
+
++ cin不断读取，直至遇到空白字符；cin.getline()不断读取，直至遇到换行符；
++ 写入到文本文件：
+  + 类比cout用于控制台输出：
+    + 必须包含头文件iostream；
+    + 头文件iostream定义了一个用于处理输出的ostream类
+    + 头文件iostream声明了一个名为cout的ostream对象
+    + 必须指明命名空间std，或通过std::
+    + 结合使用cout和运算符<<来显示各种类型的数据
+  + 文件输出与此类似：
+    + 必须包含头文件fstream
+    + fstream定义了一个用于处理输出的ofstream类
+    + 需要声明ofstream对象
+    + 指明命名空间std
+    + 需要将ofstream对象和文件关联起来，可使用open()方法
+    + 使用完文件后，应使用close()方法将其关闭
+    + 可结合ofstream对象和运算符<<来输出各种类型的数据
+      ```cpp
+      #include<iostream>
+      #include<fstream>
+      #include<string>
+      int main()
+      {
+        using namespace std;
+        string str[] = { "Hello", "This is C++ Primer" };
+        cout << sizeof(str);
+        ofstream outfile;
+        outfile.open("hello_cpp.txt");
+        if(outfile.is_open())
+        {
+          for (int i = 0; i< sizeof(str)/sizeof(str[0]); i++)
+          {
+            outfile << str[i] << endl;
+          }
+        }
+        
+        outfile.close();
+        return 0;
+      }
+      ```
+  + 总结使用文件输出的主要步骤：
+    1. 包含头文件fstream
+    2. 创建一个ofstream对象
+    3. 将ofstream对象与文件关联起来
+    4. 像cout那样使用ofstream对象
+  + 在程序运行前，若文件不存在，则会创建文件；若文件已存在，默认方式下会先清空文件，再向文件输出内容
+  + 打开文件可能会失败，一般要加`if(outfile.is_open())`判断
++ 读取文本文件：
+  + 类比cin用于控制台输入：
+    + 必须包含头文件iostream
+    + 头文件iostream定义了一个用于处理输入的istream类
+    + 头文件iostream声明了一个istream对象cin
+    + 指明命名空间std
+    + 使用cin和>>运算符来读取各种类型的数据
+    + 可以使用cin和get()方法读取一个字符，使用cin.getline()读取一行字符
+    + 结合使用cin和eof()、fail()方法来判断输入是否成功
+    + cin本身被用作测试条件时，若最后一个读取成功，则其被转换为true，否则被转换为false
+  + 文件输入与此类似：
+    + 必须包含头文件fstream
+    + 头文件fstream定义了一个用于处理输入的ifstream类
+    + 声明一个ifstream对象
+    + 指明命名空间std
+    + 将ifstream对象与文件相关联
+    + 使用ifstream对象和>>运算符来读取各种类型的数据
+    + 可以使用ifstream对象和get()方法读取一个字符，使用ifstream对象和getline()读取一行字符
+    + 结合使用ifstream对象和eof()、fail()方法来判断输入是否成功
+    + ifstream本身被用作测试条件时，若最后一个读取成功，则其被转换为true，否则被转换为false
+    + 文件使用完后使用close()方法关闭
+  + 如果试图打开不存在的文件进行输入，通过is_open()方法检测
+    ```cpp
+    infile.open("hello_cpp.txt")
+    if(!infile.is_open())
+    {
+      exit(EXIT_FAILURE);//通过头文件#include<cstdlib>引入对exit()的支持
+    }
+    ```
+  + 文件输入示例：
+    ```cpp
+    #include"stdafx.h"
+    #include <string>
+    #include <iostream>
+    #include <fstream>
+    #include <cstdlib>
+    #include <ctime>
+    int main()
+    {
+      using namespace std;
+      ifstream infile;
+      int line_count = 0;
+      string *pt = new string[100];
+      infile.open("hello_cpp.txt");
+      if (not infile.is_open())
+      {
+        exit(EXIT_FAILURE);
+      }
+      getline(infile, pt[0]);
+      line_count++;
+      cout << pt[0] << endl;
+      while (infile.good())
+      {
+        line_count++;
+        getline(infile, pt[line_count]);
+        cout << pt[line_count] << endl;
+      }
+      infile.close();
+      clock_t start = clock();
+      delete[] pt;
+      cout << line_count << " lines read";
+      while (clock() - start < 5 * CLOCKS_PER_SEC)
+        ;
+      return 0;
+    }
+    ```
+    更好的方案：
+    ```cpp
+    #include"stdafx.h"
+    #include <string>
+    #include <iostream>
+    #include <fstream>
+    #include <cstdlib>
+    #include <ctime>
+    #include <vector>
+    int main()
+    {
+      using namespace std;
+      ifstream infile;
+      string line;
+      int line_count = 0;
+      vector<string>  words;
+      infile.open("hello_cpp.txt");
+      if (not infile.is_open())
+      {
+        exit(EXIT_FAILURE);
+      }
+      getline(infile, line);
+      words.push_back(line);
+      line_count++;
+      while (infile.good())
+      {
+        line_count++;
+        getline(infile, line);
+        words.push_back(line);
+      }
+      infile.close();
+      for (string line : words)
+        cout << line << endl;
+      cout << line_count << " lines read" << endl;
+      clock_t start = clock();
+      while (clock() - start < 5 * CLOCKS_PER_SEC)
+        ;
+      return 0;
+    }
+    ```
+  + infile.good()方法在发生任何错误时返回false，相比检测eof和fail更加简便；good()方法指出最后一次读取操作是否成功，即执行读取操作后进行测试，一种标准的方法是，在循环测试之前放置一条输入语句，并在循环末尾放置一条输入语句：
+    ```cpp
+    infile>>value;
+    while (infile.good())
+    {
+      //loop body
+      infile>>value;
+    }
+    ```
+---
+
+## 7 函数 —— C++编程模块
+
+### 7.1 函数Basics
+
++ c++对函数返回值类型有一定限制：不能返回数组，其它类型均可；虽然不能返回数组，但能够将数组作为结构或对象的组成部分来返回
++ 函数原型一般隐藏在include文件中，函数原型将函数返回值类型和参数类型、数量告诉编译器，达到捕获错误、提升效率的目的；函数原型的参数列表中，一般只指明参数类型即可，无需写明参数名称
+
+### 7.2 函数参数和按值传递
+
+### 7.3 函数和数组
+
++ `int sum_arr(int arr[], int n)` 语句中，arr实际上不是数组，而是指针，但在函数中可以将arr当作数组使用
++ c++将数组名解释为其第一个元素的地址：
+  ```cpp
+  arr == &arr[0];
+  ```
+  以下几种情况例外：
+  + 数组声明使用数组名来标记存储位置
+  + 对数组名使用sizeof会得到整个数组的长度
+  + 将地址运算符&应用于数组名时，将返回整个数组的地址（加1会增加整个数组长度）
++ 对于函数头`int sum_arr(int arr[], int n)`，以下的函数头也是正确的，`int sum_arr(int * arr, int n)`. c++中，仅当用于函数头或者函数原型中，`int arr[]`和`int * arr`才是等价的
++ 传递常规变量时，函数使用该变量的拷贝；但传递数组时，函数使用原来的数组；这不违背函数按值传递的方法，只是这个值换成了地址
++ 使用const保护数组：
+  ```cpp
+  void show_array(const double ar[], int n);
+  ```
+  这意味着不能使用ar修改该数据，即不能再show_array函数中修改数组内容
++ 使用数组区间的函数：通过数组头尾两个指针和指针加法遍历数组内容
++ 指针和const：
+  + 两种不同方式将const应用于指针：
+    + 让指针指向一个常量对象，方式使用该指针修改所指向的值
+    + 将指针本身声明为常量，防止改变指针所指向的位置
+  + **const变量的地址可赋给指向const的指针，不能赋给常规指针**
+    ```cpp
+    const int months[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int sum(int arr[], int n)
+    {...}
+    int i = sum(months, 12); //not allowed
+    ```
+  + const与指针结合的三种方式：
+    ```cpp
+    int sloth = 3;
+    const int * pt = &sloth;//防止通过pt修改其所指向的sloth
+    int * const ps = &sloth;//防止改变ps所指向的位置
+    const int * const pp =&sloth;//指向const对象的const指针
+    ```
+
+### 7.4 函数和二维数组
+```cpp
+int data[3][4] = {{1,2,3,4},{5,6,7,8},{9,10,11,12}};
+int sum_data = sum(data, int size);
+int sum(int (*arr)[4], int size)
+//int sum(int arr[][4], int size)
+{...}
+```
+
+### 7.5 函数和C-风格字符串
+函数处理字符串的标准方式：
+```cpp
+while(*str)
+{
+  statements
+  str++;
+}
+```
+```cpp
+#include"stdafx.h"
+#include <iostream>
+#include <ctime>
+int print_str(const char * str)
+{
+    using namespace std;
+    while (*str)
+    {
+      cout <<* str << endl;
+      str++;
+    }
+    return 0;
+}
+int main()
+{
+    using namespace std;
+    char str[] = "Hello";
+    print_str(str);
+    cout<<str<<endl;
+    clock_t start = clock();
+    while (clock() - start < 5 * CLOCKS_PER_SEC)
+      ;
+    return 0;
+}
+```
+
+### 7.6 函数和结构
+
++ 结构与普通变量一样，按值传递，函数使用原结构的副本；但如果结构很大，按值传递会增加内存要求，降低系统运行速度，基于这个原因，许多C程序员倾向于传递结构地址，然后使用指针访问结构内容
++ 通过传递结构地址、使用指针访问结构内容的方式，可用const修饰防止结构内容被修改，此外通过指针访问结构内容需要使用间接成员运算符->
+
+### 7.7 函数和string对象
+
+```cpp
+int size = 5;
+string list[size];
+for(int i = 0; i<size; i++)
+{
+  cout<<i+1<<": "<<endl;
+  getline(cin,list[i]);
+}
+...
+```
+
+### 7.8 函数与array对象
+
++ array默认按值传递，可通过引用的方式让函数操作原始数据
+  ```cpp
+  std::array<double, 4> expenses;
+  show(expenses);
+  fill(&expenses);
+  ```
+对应的函数原型：
+  ```cpp
+  show(std::array<double, 4> para_1);
+  fill(std::array<double, 4> * para_2);
+  ```
+通过(*para_2)[i]访问、修改expenses元素
+
+### 7.9 *递归*
+
+### 7.10 *函数指针*
+
+
+## 8 函数探幽
+
+### 8.1 内联函数
+
++ 常规函数调用使程序跳到另一个地址，并在函数结束时返回；对于内联代码，程序无需跳到另一位置再返回，内联函数运行速度稍快，但占用更多内存；如果程序在10个地方调用10次内联函数，则该程序包含10个该函数的代码；
++ 内联函数在函数定以前加inline:
+  ```cpp
+  inline double square(double t) {return t*t;}
+  ```
++ 内联与宏：C语言使用预处理器语句#define来提供宏，如一个计算平方的宏：
+  ```cpp
+  #define SQUARE(X) X*X
+  ```
+但这不是通过传递参数实现的，只是通过文本替换实现的，如：
+  ```cpp
+  double b =SQUARE(4.5+7.5);//被替换为double b = 4.5+7.5*4.5+7.5;
+  ```
+
+### 8.2 引用变量
+
++ 通过引用变量作为函数参数，函数可对原始数据做操作与修改，同时为函数处理大型结构提供了便捷的途径
+```cpp
+int rats;
+int & rodents = rats;
+```
++ 可以通过初始化来设置引用，但不能通过赋值来设置
++ 引用作为函数参数：
+  ```cpp
+  int m= 1,n=2;
+  int swap(int &a, int &b)
+  {
+    int t =0;
+    t=a;
+    a=b;
+    b=t
+    return 0;
+  }
+  swap(m,n);
+  ```
++ 如果只是引用变量信息，而不做修改，可加const修饰
+
+### 8.3 默认参数
+
++ 必须通过函数原型设置默认值，函数原型设置后，函数定义和没有默认参数完全相同；
+
+### 8.4 函数重载
+
++ 函数重载及函数多态
++ 特征标、参数数目、参数排列顺序
++ 一般只在函数实现相同功能，但使用不同形式的数据时使用函数重载
+
+### 8.5 函数模版
+
++ 函数模板是通用的函数描述，使用泛型来定义函数，其中泛型可使用具体类型（double、int等）来替换
