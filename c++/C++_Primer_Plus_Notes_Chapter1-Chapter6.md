@@ -1,4 +1,5 @@
-# C++ Primer Plus 第六版 学习笔记
+# C++ Primer Plus 第六版 学习笔记 Chapter 1 ~ Chapter 6
+
 > C++系统学习笔记，Created in 20180516
 ---
 
@@ -21,7 +22,7 @@
 ## Chapter 2 开始学习C++
 
 + `int main()`: 该函数头描述的是main()和操作系统之间的接口，应避免使用`void main()`这样的格式；
-+ C语言的传统是，头文件使用扩展名h，C++则不再这样，但对C的老式头文件保留了扩展；
++ C语言的传统是，头文件使用扩展名.h，C++则不再这样，但对C的老式头文件保留了扩展；
 + 命名空间namespace：旨在使编写大型程序以及将多个厂商代码组合起来更容易（如处理同名函数的问题）；
 + `cout<<"Hello World!"<<endl;`中的`<<`表示将字符串发送给cout；
 + endl与\n换行符：\n是c语言符号；
@@ -30,6 +31,7 @@
 + `#include <cmath>`
 + 在多函数程序中使用using编译指令，可将其放在函数外部（如前面）；
 + `cin`和`cout`为用于处理输入和输出的预定义对象，它们是istream和ostream类的实例；`cin`和`cout`是智能对象，可依据上下文自动将信息从一种形式转化为另一种形式。
+
 ---
 
 ## Chapter 3 处理数据
@@ -75,6 +77,7 @@
     + 传递参数时的转换；
     + 强制类型转换；
     + auto声明：c++ 11新增了auto，让编译器能够依据初始值的类型推断变量的类型。实用auto声明而不指定变量类型，编译器自动将变量类型设为与初始值相同；处理复杂类型时，自动推断比较有优势。
+
 ---
 
 ## Chapter 4 复合类型
@@ -703,188 +706,3 @@ int main()
     }
     ```
 ---
-
-## 7 函数 —— C++编程模块
-
-### 7.1 函数Basics
-
-+ c++对函数返回值类型有一定限制：不能返回数组，其它类型均可；虽然不能返回数组，但能够将数组作为结构或对象的组成部分来返回
-+ 函数原型一般隐藏在include文件中，函数原型将函数返回值类型和参数类型、数量告诉编译器，达到捕获错误、提升效率的目的；函数原型的参数列表中，一般只指明参数类型即可，无需写明参数名称
-
-### 7.2 函数参数和按值传递
-
-### 7.3 函数和数组
-
-+ `int sum_arr(int arr[], int n)` 语句中，arr实际上不是数组，而是指针，但在函数中可以将arr当作数组使用
-+ c++将数组名解释为其第一个元素的地址：
-  ```cpp
-  arr == &arr[0];
-  ```
-  以下几种情况例外：
-  + 数组声明使用数组名来标记存储位置
-  + 对数组名使用sizeof会得到整个数组的长度
-  + 将地址运算符&应用于数组名时，将返回整个数组的地址（加1会增加整个数组长度）
-+ 对于函数头`int sum_arr(int arr[], int n)`，以下的函数头也是正确的，`int sum_arr(int * arr, int n)`. c++中，仅当用于函数头或者函数原型中，`int arr[]`和`int * arr`才是等价的
-+ 传递常规变量时，函数使用该变量的拷贝；但传递数组时，函数使用原来的数组；这不违背函数按值传递的方法，只是这个值换成了地址
-+ 使用const保护数组：
-  ```cpp
-  void show_array(const double ar[], int n);
-  ```
-  这意味着不能使用ar修改该数据，即不能再show_array函数中修改数组内容
-+ 使用数组区间的函数：通过数组头尾两个指针和指针加法遍历数组内容
-+ 指针和const：
-  + 两种不同方式将const应用于指针：
-    + 让指针指向一个常量对象，方式使用该指针修改所指向的值
-    + 将指针本身声明为常量，防止改变指针所指向的位置
-  + **const变量的地址可赋给指向const的指针，不能赋给常规指针**
-    ```cpp
-    const int months[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    int sum(int arr[], int n)
-    {...}
-    int i = sum(months, 12); //not allowed
-    ```
-  + const与指针结合的三种方式：
-    ```cpp
-    int sloth = 3;
-    const int * pt = &sloth;//防止通过pt修改其所指向的sloth
-    int * const ps = &sloth;//防止改变ps所指向的位置
-    const int * const pp =&sloth;//指向const对象的const指针
-    ```
-
-### 7.4 函数和二维数组
-```cpp
-int data[3][4] = {{1,2,3,4},{5,6,7,8},{9,10,11,12}};
-int sum_data = sum(data, int size);
-int sum(int (*arr)[4], int size)
-//int sum(int arr[][4], int size)
-{...}
-```
-
-### 7.5 函数和C-风格字符串
-函数处理字符串的标准方式：
-```cpp
-while(*str)
-{
-  statements
-  str++;
-}
-```
-```cpp
-#include"stdafx.h"
-#include <iostream>
-#include <ctime>
-int print_str(const char * str)
-{
-    using namespace std;
-    while (*str)
-    {
-      cout <<* str << endl;
-      str++;
-    }
-    return 0;
-}
-int main()
-{
-    using namespace std;
-    char str[] = "Hello";
-    print_str(str);
-    cout<<str<<endl;
-    clock_t start = clock();
-    while (clock() - start < 5 * CLOCKS_PER_SEC)
-      ;
-    return 0;
-}
-```
-
-### 7.6 函数和结构
-
-+ 结构与普通变量一样，按值传递，函数使用原结构的副本；但如果结构很大，按值传递会增加内存要求，降低系统运行速度，基于这个原因，许多C程序员倾向于传递结构地址，然后使用指针访问结构内容
-+ 通过传递结构地址、使用指针访问结构内容的方式，可用const修饰防止结构内容被修改，此外通过指针访问结构内容需要使用间接成员运算符->
-
-### 7.7 函数和string对象
-
-```cpp
-int size = 5;
-string list[size];
-for(int i = 0; i<size; i++)
-{
-  cout<<i+1<<": "<<endl;
-  getline(cin,list[i]);
-}
-...
-```
-
-### 7.8 函数与array对象
-
-+ array默认按值传递，可通过引用的方式让函数操作原始数据
-  ```cpp
-  std::array<double, 4> expenses;
-  show(expenses);
-  fill(&expenses);
-  ```
-对应的函数原型：
-  ```cpp
-  show(std::array<double, 4> para_1);
-  fill(std::array<double, 4> * para_2);
-  ```
-通过(*para_2)[i]访问、修改expenses元素
-
-### 7.9 *递归*
-
-### 7.10 *函数指针*
-
-
-## 8 函数探幽
-
-### 8.1 内联函数
-
-+ 常规函数调用使程序跳到另一个地址，并在函数结束时返回；对于内联代码，程序无需跳到另一位置再返回，内联函数运行速度稍快，但占用更多内存；如果程序在10个地方调用10次内联函数，则该程序包含10个该函数的代码；
-+ 内联函数在函数定以前加inline:
-  ```cpp
-  inline double square(double t) {return t*t;}
-  ```
-+ 内联与宏：C语言使用预处理器语句#define来提供宏，如一个计算平方的宏：
-  ```cpp
-  #define SQUARE(X) X*X
-  ```
-但这不是通过传递参数实现的，只是通过文本替换实现的，如：
-  ```cpp
-  double b =SQUARE(4.5+7.5);//被替换为double b = 4.5+7.5*4.5+7.5;
-  ```
-
-### 8.2 引用变量
-
-+ 通过引用变量作为函数参数，函数可对原始数据做操作与修改，同时为函数处理大型结构提供了便捷的途径
-```cpp
-int rats;
-int & rodents = rats;
-```
-+ 可以通过初始化来设置引用，但不能通过赋值来设置
-+ 引用作为函数参数：
-  ```cpp
-  int m= 1,n=2;
-  int swap(int &a, int &b)
-  {
-    int t =0;
-    t=a;
-    a=b;
-    b=t
-    return 0;
-  }
-  swap(m,n);
-  ```
-+ 如果只是引用变量信息，而不做修改，可加const修饰
-
-### 8.3 默认参数
-
-+ 必须通过函数原型设置默认值，函数原型设置后，函数定义和没有默认参数完全相同；
-
-### 8.4 函数重载
-
-+ 函数重载及函数多态
-+ 特征标、参数数目、参数排列顺序
-+ 一般只在函数实现相同功能，但使用不同形式的数据时使用函数重载
-
-### 8.5 函数模版
-
-+ 函数模板是通用的函数描述，使用泛型来定义函数，其中泛型可使用具体类型（double、int等）来替换

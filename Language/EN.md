@@ -35,3 +35,5 @@
 + extent 程度，长度
 + intersect 横断，横切
 + compound 复合，混合
++ punctuation
++ alphabetic
