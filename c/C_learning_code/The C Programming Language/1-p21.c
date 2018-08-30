@@ -1,3 +1,4 @@
+//0826
 //编写getline()和reverse()，getline()将一行读入到s中，并返回长度；reverse()实现倒序
 
 #include "stdio.h"

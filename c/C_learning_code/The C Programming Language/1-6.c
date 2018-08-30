@@ -1,3 +1,4 @@
+//0826
 //验证getchar()!=EOF的值是0还是1,打印EOF的值
 #include "stdio.h"
 

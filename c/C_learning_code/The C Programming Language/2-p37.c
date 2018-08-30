@@ -1,3 +1,4 @@
+//0827
 //±àÐ´squeeze()£¬´Ó×Ö·û´®sÖÐÉ¾³ýc
 
 #include "stdio.h"
