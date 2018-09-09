@@ -1,5 +1,6 @@
-//0827
-//��дsqueeze(s1,s2)����s1����s2���ַ�ƥ���ɾ��
+﻿//0827
+//编写函数any(s1,s2),将字符串s2中的任一字符在s1中第一次出现的位置作为结果返回，若不包含则返回-1
+
 #include "stdio.h"
 #define MAX 100
 
@@ -30,19 +31,16 @@ int check(char c, char s[])
 	for(int i =0;s[i]!='\0';i++)
 	{
 		if(s[i] == c)
-			return 1;
+			return i+1;
 	}
-	return 0;
+	return -1;
 }
 
-int squeeze(char s1[],char s2[])
+int pos_print(char s1[],char s2[])
 {
-	int i,j;
-	for(i=j=0; s1[i]!='\0'; i++)
+	for(int i=0;s2[i]!='\0';i++)
 	{
-		if(!check(s1[i],s2))
-			s1[j++] = s1[i];
-		s1[j] = '\0';
+		printf("%c******%d\n",s2[i],check(s2[i],s1));
 	}
 	return 0;
 }
@@ -55,8 +53,7 @@ int main()
 	printf("\nenter another line:\n");
 	char s2[MAX];
 	getline_(s2,MAX);
-	squeeze(s1,s2);
-	printf("\nSqueezed line:\n");
-	printline(s1);
+	printf("\nResults:\n");
+	pos_print(s1,s2);
 	return 0;
 }

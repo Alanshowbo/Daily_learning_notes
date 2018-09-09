@@ -1,6 +1,5 @@
-//0827
-//±àĞ´º¯Êıany(s1,s2),½«×Ö·û´®s2ÖĞµÄÈÎÒ»×Ö·ûÔÚs1ÖĞµÚÒ»´Î³öÏÖµÄÎ»ÖÃ×÷Îª½á¹û·µ»Ø£¬Èô²»°üº¬Ôò·µ»Ø-1
-
+ï»¿//0827
+//ç¼–å†™squeeze(s1,s2)ï¼Œå°†s1ä¸­ä¸s2ä¸­å­—ç¬¦åŒ¹é…çš„åˆ é™¤
 #include "stdio.h"
 #define MAX 100
 
@@ -31,16 +30,19 @@ int check(char c, char s[])
 	for(int i =0;s[i]!='\0';i++)
 	{
 		if(s[i] == c)
-			return i+1;
+			return 1;
 	}
-	return -1;
+	return 0;
 }
 
-int pos_print(char s1[],char s2[])
+int squeeze(char s1[],char s2[])
 {
-	for(int i=0;s2[i]!='\0';i++)
+	int i,j;
+	for(i=j=0; s1[i]!='\0'; i++)
 	{
-		printf("%c******%d\n",s2[i],check(s2[i],s1));
+		if(!check(s1[i],s2))
+			s1[j++] = s1[i];
+		s1[j] = '\0';
 	}
 	return 0;
 }
@@ -53,7 +55,8 @@ int main()
 	printf("\nenter another line:\n");
 	char s2[MAX];
 	getline_(s2,MAX);
-	printf("\nResults:\n");
-	pos_print(s1,s2);
+	squeeze(s1,s2);
+	printf("\nSqueezed line:\n");
+	printline(s1);
 	return 0;
 }

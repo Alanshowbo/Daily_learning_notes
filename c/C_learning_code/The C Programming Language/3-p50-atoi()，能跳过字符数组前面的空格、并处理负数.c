@@ -1,5 +1,5 @@
-//���±�дatoi()��Ҫ���������ַ�����ǰ��Ŀո񡢲���������
-//ʹ�ñ�׼���е�strtol()����
+﻿//重新编写atoi()，要求能跳过字符数组前面的空格、并处理负数
+//使用标准库中的strtol()函数
 #include "stdio.h"
 #include "string.h"
 #define MAX 100

@@ -1,5 +1,5 @@
-//0826
-//±àĞ´getline()ºÍreverse()£¬getline()½«Ò»ĞĞ¶ÁÈëµ½sÖĞ£¬²¢·µ»Ø³¤¶È£»reverse()ÊµÏÖµ¹Ğò
+ï»¿//0826
+//ç¼–å†™getline()å’Œreverse()ï¼Œgetline()å°†ä¸€è¡Œè¯»å…¥åˆ°sä¸­ï¼Œå¹¶è¿”å›é•¿åº¦ï¼›reverse()å®ç°å€’åº
 
 #include "stdio.h"
 #define MAX 1000

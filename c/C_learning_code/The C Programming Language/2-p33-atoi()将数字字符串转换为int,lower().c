@@ -1,5 +1,5 @@
-//0827
-//��дatoi()��lower(),atoi()�������ַ���ת��Ϊint��lower���ַ����еĴ�д��ĸת��ΪСд
+﻿//0827
+//编写atoi()、lower(),atoi()将数字字符串转换为int，lower将字符串中的大写字母转换为小写
 
 #include "stdio.h"
 #include "stdlib.h"

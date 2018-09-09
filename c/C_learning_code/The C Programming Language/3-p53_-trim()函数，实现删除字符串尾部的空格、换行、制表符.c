@@ -1,5 +1,5 @@
-//0829
-//��дtrim()������ʵ��ɾ���ַ���β���Ŀո񡢻��С��Ʊ���
+﻿//0829
+//编写trim()函数，实现删除字符串尾部的空格、换行、制表符
 
 #include "stdio.h"
 #include "string.h"
