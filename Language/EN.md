@@ -35,5 +35,9 @@
 + extent 程度，长度
 + intersect 横断，横切
 + compound 复合，混合
-+ punctuation
-+ alphabetic
++ punctuation 标点符号
++ alphabetic 字母的
++ extrapolate 推断，推知
++ retrieve 找回，取回
++ bottleneck 障碍，限制(v)
++ blindfolded 眼睛被蒙住的，盲目的
