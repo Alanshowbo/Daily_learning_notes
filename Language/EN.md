@@ -41,3 +41,16 @@
 + retrieve 找回，取回
 + bottleneck 障碍，限制(v)
 + blindfolded 眼睛被蒙住的，盲目的
++ stationary 静止的，不动的
++ plentiful 丰富的
++ utilize 使用，利用
++ extrema 极值
++ illustrate 说明，表明
++ conical 圆锥形的
++ sophisticated 复杂的，精致的，富有经验的，深奥微妙的
++ detour 绕道，绕过
++ acoustic 声学的，听觉的
++ periphery 外围，边缘
++ vicinity 附近地区，附近
++ refinement 精炼，提纯，净化; 改良品; 细微的改良; 优雅，高贵的动作
++ impose 强加; 征税; 以…欺骗; 利用; 欺骗
